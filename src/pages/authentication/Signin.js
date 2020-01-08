@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import sha256 from 'sha256';
 import qs from 'qs';
 import api from '../../tools/api';
 import './authentication.css';
 
 const initUser = {
-  email: '',
+  info: '',
   password: ''
 };
 
+const initError = {
+  isError: false,
+  content: ''
+};
+
 const Signin = () => {
+  const history = useHistory();
+
   const [user, setUser] = useState(initUser);
+  const [error, setError] = useState(initError);
+  const [success, setSuccess] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const handleChange = e => {
+    setError(initError);
     setUser({
       ...user,
       [e.target.id]: e.target.value
@@ -21,15 +33,30 @@ const Signin = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if(!user.info || !user.password) {
+      setError({
+        isError: true,
+        content: '请将信息填写完整'
+      });
+      return;
+    }
+    setBtnLoading(true);
     let data = {
-      email: user.email,
+      info: user.info,
       password: sha256(user.password)
     };
     console.log(qs.stringify(data));
     api
-      .login(qs.stringify(data))
+      .login(data)
       .then(res => {
         console.log(res);
+        if(res.status === 200) {
+          setBtnLoading(false);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setBtnLoading(false);
       })
   };
 
@@ -41,8 +68,8 @@ const Signin = () => {
 
       <form className="form-container" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="info">邮箱：</label>
-          <input type="email" id="email" value={user.email}
+          <label htmlFor="info">用户名或邮箱：</label>
+          <input type="text" id="info" value={user.info}
             className="form-control" onChange={handleChange}
           />
         </div>
@@ -54,7 +81,13 @@ const Signin = () => {
           />
         </div>
 
-        <button className="btn btn-success">登录</button>
+        { error.isError && <div className="alert alert-danger" role="alert">{ error.content }</div> }
+        { success && <div className="alert alert-success">登录成功</div> }
+
+        <button className="btn btn-dark">
+          { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
+          登录
+        </button>
       </form>
     </div>
   );
