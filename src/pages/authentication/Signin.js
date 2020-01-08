@@ -45,13 +45,23 @@ const Signin = () => {
       info: user.info,
       password: sha256(user.password)
     };
-    console.log(qs.stringify(data));
     api
-      .login(data)
+      .login(qs.stringify(data))
       .then(res => {
-        console.log(res);
-        if(res.status === 200) {
+        if(res.status === 200 && !res.data.isOk) {
           setBtnLoading(false);
+          setError({
+            isError: true,
+            content: res.data.errmsg
+          });
+          return;
+        } else if(res.status === 200 && res.data.isOk) {
+          setBtnLoading(false);
+          setSuccess(true);
+
+          setTimeout(() => {
+            history.push('/');
+          }, 1000);
         }
       })
       .catch(error => {
