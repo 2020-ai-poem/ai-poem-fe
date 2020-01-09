@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 import { base_url } from './base_url';
 
 // create anaxios instance
@@ -6,6 +7,21 @@ const request = axios.create({
   baseURL: base_url,
   // timeout: 5000 //请求超时时间
 });
+
+// axios请求拦截器
+request.interceptors.request.use(
+	config => {
+		if (config.method === 'post') {
+			config.data = qs.stringify(config.data)
+      console.log(config.data);
+		}
+		return config
+	},
+	error => {
+		console.log(error)
+		Promise.reject(error)
+	}
+);
 
 // axios响应拦截器
 request.interceptors.response.use(

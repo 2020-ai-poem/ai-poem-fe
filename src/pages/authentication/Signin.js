@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import sha256 from 'sha256';
-import qs from 'qs';
 import api from '../../tools/api';
 import './authentication.css';
 
@@ -46,7 +45,7 @@ const Signin = () => {
       password: sha256(user.password)
     };
     api
-      .login(qs.stringify(data))
+      .login(data)
       .then(res => {
         if(res.status === 200 && !res.data.isOk) {
           setBtnLoading(false);
@@ -56,12 +55,15 @@ const Signin = () => {
           });
           return;
         } else if(res.status === 200 && res.data.isOk) {
+          console.log(res);
+
+          localStorage.setItem('user', JSON.stringify(res.data));
           setBtnLoading(false);
           setSuccess(true);
 
           setTimeout(() => {
             history.push('/');
-          }, 1000);
+          }, 2000);
         }
       })
       .catch(error => {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import sha256 from 'sha256';
-import qs from 'qs';
 import api from '../../tools/api';
 import './authentication.css';
 
@@ -10,6 +9,11 @@ const initUser = {
   username: '',
   password: '',
   emailCheck: ''
+};
+
+const initSuccess = {
+  isSuccess: false,
+  content: ''
 };
 
 const initError = {
@@ -23,11 +27,12 @@ const Signup = () => {
   const [user, setUser] = useState(initUser);
   const [error, setError] = useState(initError);
   const [checkCode, setCheckCode] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(initSuccess);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
 
   const handleChange = e => {
+    setSuccess(initSuccess);
     setError(initError);
     setUser({
       ...user,
@@ -36,7 +41,7 @@ const Signup = () => {
   };
 
   const handleSubmit = e => {
-    console.log(user);
+    e.preventDefault();
     if(!user.email || !user.emailCheck || !user.username || !user.password) {
       setError({
         isError: true,
@@ -52,20 +57,26 @@ const Signup = () => {
       return;
     }
     setBtnLoading(true);
-    user.password = sha256(user.password);
-    
+    let data = {
+      email: user.email,
+      username: user.username,
+      password: sha256(user.password)
+    };
+    console.log(data);
     api
-      .register(qs.stringify(user))
+      .register(data)
       .then(res => {
-        console.log(res);
         if(res.status === 200 && res.data.isOk) {
           setBtnLoading(false);
-          setSuccess(true);
           setUser(initUser);
+          setSuccess({
+            isSuccess: true,
+            content: '注册成功，快去登录吧'
+          });
 
           setTimeout(() => {
             history.push('/signin');
-          }, 1000);
+          }, 2000);
           return;
         }
 
@@ -108,17 +119,32 @@ const Signup = () => {
     let data = {
       email: user.email
     };
-    console.log(qs.stringify(data));
     api
       .emailCheck(data)
       .then(res => {
         if(res.status === 200 && res.data.isOk) {
           setBtnDisabled(true);
           setCheckCode(res.data.number);
-        };
+          setSuccess({
+            isSuccess: true,
+            content: '验证码已经发送到你的邮箱中去喽！'
+          });
+          return;
+        } else if(res.status === 200 && !res.data.isOk) {
+          setError({
+            isError: true,
+            content: '该邮箱已经注册过了噢'
+          });
+          return;
+        }
       })
       .catch(error => {
         console.log(error);
+        setError({
+          isError: true,
+          content: '获取验证码失败'
+        });
+        return;
       })
   };
 
@@ -142,6 +168,7 @@ const Signup = () => {
           <div className="input-group">
             <input id="emailCheck" value={user.emailCheck} type="text"
               className="form-control" onChange={handleChange}
+              autoComplete="off"
             />
             <div className="input-group-append">
               <button
@@ -157,6 +184,7 @@ const Signup = () => {
           <label htmlFor="username">用户名：</label>
           <input id="username" value={user.username} type="text"
             onChange={handleChange} className="form-control"
+            autoComplete="off"
           />
         </div>
 
@@ -168,7 +196,7 @@ const Signup = () => {
         </div>
 
         { error.isError && <div className="alert alert-danger">{ error.content }</div> }
-        { success && <div className="alert alert-success">注册成功，快去登录吧</div> }
+        { success.isSuccess && <div className="alert alert-success">{ success.content }</div> }
 
         <button className="btn btn-dark" onClick={handleSubmit}>
           { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
