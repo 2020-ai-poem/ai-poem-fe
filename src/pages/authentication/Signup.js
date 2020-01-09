@@ -36,7 +36,7 @@ const Signup = () => {
   };
 
   const handleSubmit = e => {
-    e.preventDefault();
+    console.log(user);
     if(!user.email || !user.emailCheck || !user.username || !user.password) {
       setError({
         isError: true,
@@ -52,6 +52,8 @@ const Signup = () => {
       return;
     }
     setBtnLoading(true);
+    user.password = sha256(user.password);
+    
     api
       .register(qs.stringify(user))
       .then(res => {
