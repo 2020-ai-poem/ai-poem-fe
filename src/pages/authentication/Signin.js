@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import sha256 from 'sha256';
+import { UserContext } from '../../contexts/UserContext';
 import api from '../../tools/api';
 import './authentication.css';
 
@@ -15,6 +16,7 @@ const initError = {
 };
 
 const Signin = () => {
+  const { login } = useContext(UserContext);
   const history = useHistory();
 
   const [user, setUser] = useState(initUser);
@@ -55,13 +57,20 @@ const Signin = () => {
           });
           return;
         } else if(res.status === 200 && res.data.isOk) {
-          console.log(res);
-
-          localStorage.setItem('user', JSON.stringify(res.data));
           setBtnLoading(false);
           setSuccess(true);
 
+          let user = {
+            userId: res.data.userId,
+            username: res.data.userName,
+            sex: res.data.sex,
+            age: res.data.age,
+            birthDate: res.data.brithDate,
+            email: res.data.email
+          };
+
           setTimeout(() => {
+            login(user);
             history.push('/');
           }, 2000);
         }
