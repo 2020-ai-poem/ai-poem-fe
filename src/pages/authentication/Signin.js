@@ -46,6 +46,7 @@ const Signin = () => {
       info: user.info,
       password: sha256(user.password)
     };
+    console.log(data);
     api
       .login(data)
       .then(res => {
@@ -59,7 +60,7 @@ const Signin = () => {
         } else if(res.status === 200 && res.data.isOk) {
           setBtnLoading(false);
           setSuccess(true);
-
+          console.log(res);
           let user = {
             userId: res.data.userId,
             username: res.data.userName,
@@ -68,6 +69,8 @@ const Signin = () => {
             birthDate: res.data.brithDate,
             email: res.data.email
           };
+
+          localStorage.setItem('token', res.data.token);
 
           setTimeout(() => {
             login(user);

@@ -2,24 +2,30 @@ import axios from 'axios';
 import qs from 'qs';
 import { base_url } from './base_url';
 
-// create anaxios instance
+// create an axios instance
 const request = axios.create({
   baseURL: base_url,
   // timeout: 5000 //请求超时时间
+  withCredentials: true // 允许携带cookie
 });
 
 // axios请求拦截器
 request.interceptors.request.use(
 	config => {
-		if (config.method === 'post') {
+    // 设置统一的请求头
+    let token = localStorage.getItem('token');
+    if(token) {
+      config.headers.Authorization = token;
+    }
+
+		if (config.method === 'post' && config.data) {
 			config.data = qs.stringify(config.data)
-      console.log(config.data);
 		}
-		return config
+		return config;
 	},
 	error => {
-		console.log(error)
-		Promise.reject(error)
+		console.log(error);
+		Promise.reject(error);
 	}
 );
 

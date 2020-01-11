@@ -1,13 +1,29 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
+import api from '../../tools/api';
 import './public.css';
 
 const Navbar = () => {
   const { user, logout } = useContext(UserContext);
 
   const handleLogout = () => {
-    logout();
+    api
+      .logout()
+      .then(res => {
+        console.log(res);
+        if(res.status === 200 && res.data.isOk) {
+          // logout success
+          logout();
+        } else {
+          // logout failed
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        // logout failed
+      })
+      logout();
   };
 
   return (
@@ -25,7 +41,7 @@ const Navbar = () => {
               { user.username }
             </button>
             <div className="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
-              <Link className="dropdown-item" to={`/profile/id`}>个人信息</Link>
+              <Link className="dropdown-item" to={`/profile/${user.userId}`}>个人信息</Link>
               <div className="dropdown-divider"></div>
               <Link className="dropdown-item" to="/my-collection">我的收藏</Link>
               <Link className="dropdown-item" to="/my-work">我的作品</Link>
