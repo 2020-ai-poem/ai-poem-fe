@@ -1,7 +1,12 @@
+/* Navbar */
 .h3 {
   padding: 0;
 }
 
 .navbar-brand {
   margin: 0;
+}
+
+.logout:hover {
+  cursor: pointer;
 }

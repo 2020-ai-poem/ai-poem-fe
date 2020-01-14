@@ -11,9 +11,9 @@ const Navbar = () => {
     api
       .logout()
       .then(res => {
-        console.log(res);
         if(res.status === 200 && res.data.isOk) {
           // logout success
+          localStorage.removeItem('token');
           logout();
         } else {
           // logout failed
@@ -23,7 +23,6 @@ const Navbar = () => {
         console.log(error);
         // logout failed
       })
-      logout();
   };
 
   return (
@@ -46,7 +45,7 @@ const Navbar = () => {
               <Link className="dropdown-item" to="/my-collection">我的收藏</Link>
               <Link className="dropdown-item" to="/my-work">我的作品</Link>
               <div className="dropdown-divider"></div>
-              <div className="dropdown-item" onClick={handleLogout}>退出登录</div>
+              <div className="dropdown-item logout" onClick={handleLogout}>退出登录</div>
             </div>
           </span>
         ) }
