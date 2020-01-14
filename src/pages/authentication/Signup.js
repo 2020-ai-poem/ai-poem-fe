@@ -196,7 +196,7 @@ const Signup = () => {
         </div>
 
         { error.isError && <div className="alert alert-danger">{ error.content }</div> }
-        { success.isSuccess && <div className="alert alert-success">{ success.content }</div> }
+        { success.isSuccess && <div className="alert alert-warning">{ success.content }</div> }
 
         <button
           className="btn btn-dark" onClick={handleSubmit}

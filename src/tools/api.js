@@ -6,6 +6,7 @@ export default {
   logout: () => request.post('/signOut'),
   emailCheck: (data) => request.post('/emailCheck', data),
   register: (data) => request.post('/signUp', data),
-  // user
+  // profile
   getInfo: (data) => request.post('/getInfo', data),
+  modifyInfo: (data) => request.post('/modifyInfo', data),
 };

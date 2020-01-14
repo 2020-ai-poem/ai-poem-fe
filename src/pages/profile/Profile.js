@@ -22,12 +22,11 @@ const initSuccess = {
 };
 
 const Profile = (props) => {
+  const [user1, setUser1] = useState(initUser);
   const [user, setUser] = useState(initUser);
   const [form, setForm] = useState({});
-  const [checkCode, setCheckCode] = useState(null);
   const [error, setError] = useState(initError);
   const [success, setSuccess] = useState(initSuccess);
-  const [emailCheckBtn, setEmailCheckBtn] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
 
   useEffect(() => {
@@ -50,17 +49,22 @@ const Profile = (props) => {
             birthDate: res.data.birthDate,
             userName: res.data.userName
           });
+          setUser1({
+            age: !res.data.age ? '0' : res.data.age,
+            email: res.data.email,
+            userId: res.data.userId,
+            sex: !res.data.sex ? 'unknown' : res.data.sex,
+            birthDate: res.data.birthDate,
+            userName: res.data.userName
+          });
         }
       })
   }, [props]);
 
-  const handleChange = e => {
-    if(e.target.id === 'email') {
-      setEmailCheckBtn(false);
-    } else {
-      setEmailCheckBtn(true);
-    }
 
+  const handleChange = e => {
+    setError(initError);
+    setSuccess(initSuccess);
     setUser({
       ...user,
       [e.target.id]: e.target.value
@@ -74,39 +78,30 @@ const Profile = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log(form);
-  };
+    if(
+      JSON.stringify(form) === "{}" ||
+      JSON.stringify(user) === JSON.stringify(user1)
+    ) {
+      setError({
+        isError: true,
+        content: '没有做任何修改噢！'
+      });
+    return;
+    }
+    setBtnLoading(true);
 
-  const emailCheck = e => {
-    e.preventDefault();
-    let data = {
-      email: user.email
-    };
     api
-      .emailCheck(data)
+      .modifyInfo(form)
       .then(res => {
-        if(res.status === 200 && res.data.isOk) {
-          setEmailCheckBtn(true);
-          setCheckCode(res.data.number);
-          setSuccess({
-            isSuccess: true,
-            content: '验证码已经发送到你的邮箱中去喽！'
-          });
-          return;
-        } else if(res.status === 200 && !res.data.isOk) {
-          setError({
-            isError: true,
-            content: '该邮箱已经注册过了噢'
-          });
-          return;
-        }
+        console.log(res);
       })
       .catch(error => {
         console.log(error);
+        setBtnLoading(false);
         setError({
           isError: true,
-          content: '获取验证码失败'
+          content: '服务器出错了，修改信息失败'
         });
-        return;
       })
   };
 
@@ -116,7 +111,7 @@ const Profile = (props) => {
       <hr className="line"></hr>
 
       <div className="profile-container">
-        <form className="container py-4">
+        <form className="container py-4" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">用户名：</label>
             <input
@@ -125,19 +120,12 @@ const Profile = (props) => {
             />
           </div>
 
-          <label htmlFor="email">邮箱：</label>
-          <div className="input-group mb-3">
+          <div className="form-group">
+            <label htmlFor="email">邮箱：</label>
             <input
               type="text" value={user.email} className="form-control"
-              onChange={handleChange} id="email"
+              readOnly
             />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                disabled={emailCheckBtn}
-                onClick={emailCheck}
-              >获取验证码</button>
-            </div>
           </div>
 
           <div className="form-group">
@@ -160,10 +148,19 @@ const Profile = (props) => {
             />
           </div>
 
+          { success.isSuccess && (
+            <div className="alert alert-warning">{ success.content }</div>
+          ) }
+          { error.isError && (
+            <div className="alert alert-danger">{ error.content }</div>
+          ) }
+
           <button
             className="btn btn-dark" onClick={handleSubmit}
             style={{ backgroundColor: '#801336', border: 'none' }}
-          >修改信息</button>
+          >
+          { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
+          修改信息</button>
         </form>
       </div>
     </div>
