@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-dark" style={{ backgroundColor: '#1b5745' }}>
+    <nav className="navbar navbar-dark" style={{ backgroundColor: '#801336' }}>
       <Link to="/" className="navbar-brand h3">AI Poem</Link>
       <div>
         { user === null ? (
