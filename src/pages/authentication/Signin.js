@@ -60,7 +60,6 @@ const Signin = () => {
         } else if(res.status === 200 && res.data.isOk) {
           setBtnLoading(false);
           setSuccess(true);
-          console.log(res);
           let user = {
             userId: res.data.userId,
             username: res.data.userName,

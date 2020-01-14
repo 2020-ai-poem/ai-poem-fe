@@ -27,8 +27,11 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-dark" style={{ backgroundColor: '#801336' }}>
-      <Link to="/" className="navbar-brand h3">AI Poem</Link>
       <div>
+        <Link to="/" className="navbar-brand h3 mr-2">AI Poem</Link>
+      </div>
+      <div>
+        <Link to="/create" className="btn btn-outline-light mr-2">作诗</Link>
         { user === null ? (
           <span>
             <Link to="/signup" className="btn btn-outline-light mr-2">注册</Link>
