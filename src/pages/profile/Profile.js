@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../tools/api';
-import './profile.css';
+import '../../tools/becca.css';
 
 const initUser = {
   age: '...',
@@ -106,11 +106,11 @@ const Profile = (props) => {
   };
 
   return (
-    <div className="profile container mt-5">
-      <h3 className="title">个人信息</h3>
-      <hr className="line"></hr>
+    <div className="becca-container">
+      <h3 className="becca-title">个人信息</h3>
+      <hr className="becca-line"></hr>
 
-      <div className="profile-container">
+      <div className="becca-inner-container">
         <form className="container py-4" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">用户名：</label>
@@ -156,7 +156,7 @@ const Profile = (props) => {
           ) }
 
           <button
-            className="btn btn-dark" onClick={handleSubmit}
+            className="btn btn-dark mt-3" onClick={handleSubmit}
             style={{ backgroundColor: '#801336', border: 'none' }}
           >
           { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }

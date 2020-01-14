@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import sha256 from 'sha256';
 import api from '../../tools/api';
-import './authentication.css';
+import '../../tools/becca.css';
 
 const initUser = {
   email: '',
@@ -149,64 +149,65 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup container">
-      <div className="sign-title">
-        <h3>注册</h3>
-      </div>
+    <div className="becca-container">
+      <h3 className="becca-title">注册</h3>
+      <hr className="becca-line"></hr>
 
-      <form className="form-container">
-        <div className="form-gruop mb-3">
-          <label htmlFor="email">邮箱：</label>
-          <input id="email" value={user.email} type="email"
-            className="form-control" onChange={handleChange}
-            autoComplete="off"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="emailCheck">邮箱验证码：</label>
-          <div className="input-group">
-            <input id="emailCheck" value={user.emailCheck} type="text"
+      <div className="becca-inner-container">
+        <form className="container py-4">
+          <div className="form-gruop mb-3">
+            <label htmlFor="email">邮箱：</label>
+            <input id="email" value={user.email} type="email"
               className="form-control" onChange={handleChange}
               autoComplete="off"
             />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                disabled={btnDisabled}
-                onClick={emailCheck}
-              >获取验证码</button>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="emailCheck">邮箱验证码：</label>
+            <div className="input-group">
+              <input id="emailCheck" value={user.emailCheck} type="text"
+                className="form-control" onChange={handleChange}
+                autoComplete="off"
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-secondary"
+                  disabled={btnDisabled}
+                  onClick={emailCheck}
+                >获取验证码</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label htmlFor="username">用户名：</label>
-          <input id="username" value={user.username} type="text"
-            onChange={handleChange} className="form-control"
-            autoComplete="off"
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="username">用户名：</label>
+            <input id="username" value={user.username} type="text"
+              onChange={handleChange} className="form-control"
+              autoComplete="off"
+            />
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="password">密码：</label>
-          <input id="password" value={user.password} type="password"
-            onChange={handleChange} className="form-control"
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="password">密码：</label>
+            <input id="password" value={user.password} type="password"
+              onChange={handleChange} className="form-control"
+            />
+          </div>
 
-        { error.isError && <div className="alert alert-danger">{ error.content }</div> }
-        { success.isSuccess && <div className="alert alert-warning">{ success.content }</div> }
+          { error.isError && <div className="alert alert-danger">{ error.content }</div> }
+          { success.isSuccess && <div className="alert alert-warning">{ success.content }</div> }
 
-        <button
-          className="btn btn-dark" onClick={handleSubmit}
-          style={{ backgroundColor: '#801336', border: 'none' }}
-        >
-          { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
-          注册
-        </button>
+          <button
+            className="btn btn-dark mt-3" onClick={handleSubmit}
+            style={{ backgroundColor: '#801336', border: 'none' }}
+          >
+            { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
+            注册
+          </button>
 
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
