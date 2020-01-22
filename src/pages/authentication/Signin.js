@@ -105,11 +105,10 @@ const Signin = () => {
           </div>
 
           { error.isError && <div className="alert alert-danger" role="alert">{ error.content }</div> }
-          { success && <div className="alert alert-warning">登录成功</div> }
+          { success && <div className="alert alert-success">登录成功</div> }
 
           <button
             className="btn btn-dark mt-3"
-            style={{ backgroundColor: '#801336', border: 'none' }}
           >
             { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
             登录

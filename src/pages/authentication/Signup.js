@@ -196,11 +196,11 @@ const Signup = () => {
           </div>
 
           { error.isError && <div className="alert alert-danger">{ error.content }</div> }
-          { success.isSuccess && <div className="alert alert-warning">{ success.content }</div> }
+          { success.isSuccess && <div className="alert alert-success">{ success.content }</div> }
 
           <button
-            className="btn btn-dark mt-3" onClick={handleSubmit}
-            style={{ backgroundColor: '#801336', border: 'none' }}
+            className="btn btn-dark mt-3"
+            onClick={handleSubmit}
           >
             { btnLoading && <span className="mr-2 spinner-grow spinner-grow-sm"></span> }
             注册

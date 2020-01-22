@@ -26,20 +26,20 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-dark" style={{ backgroundColor: '#801336' }}>
+    <nav className="navbar navbar-light">
       <div>
         <Link to="/" className="navbar-brand h3 mr-2">AI Poem</Link>
       </div>
       <div>
-        <Link to="/create" className="btn btn-outline-light mr-2">作诗</Link>
+        <Link to="/create" className="btn btn-outline-dark mr-2">作诗</Link>
         { user === null ? (
           <span>
-            <Link to="/signup" className="btn btn-outline-light mr-2">注册</Link>
-            <Link to="/signin" className="btn btn-outline-light">登录</Link>
+            <Link to="/signin" className="btn btn-outline-dark mr-2">登录</Link>
+            <Link to="/signup" className="btn btn-dark">注册</Link>
           </span>
         ) : (
           <span className="dropdown">
-            <button className="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button className="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               { user.username }
             </button>
             <div className="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
