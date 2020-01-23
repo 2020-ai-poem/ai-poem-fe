@@ -1,5 +1,6 @@
 import React, { useState, createContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import api from '../tools/api';
 
 export const UserContext = createContext();
 
@@ -18,8 +19,13 @@ const UserContextProvider = (props) => {
     history.push('/');
   };
 
+  const update = (data) => {
+    console.log(data);
+    // api updata
+  };
+
   return (
-    <UserContext.Provider value={{ user: JSON.parse(user), login, logout }}>
+    <UserContext.Provider value={{ user: JSON.parse(user), login, logout, update }}>
       { props.children }
     </UserContext.Provider>
   );
