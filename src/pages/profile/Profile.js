@@ -15,6 +15,7 @@ const initInfo = {
 
 const Profile = (props) => {
   const { user, update } = useContext(UserContext);
+  const [formInfo, setFormInfo] = useState(initInfo);
   const [info, setInfo] = useState(initInfo);
 
   useEffect(() => {
@@ -36,12 +37,27 @@ const Profile = (props) => {
             birthDate: res.data.birthDate,
             username: res.data.userName
           });
+          setFormInfo({
+            age: !res.data.age ? '0' : res.data.age,
+            email: res.data.email,
+            userId: res.data.userId,
+            sex: !res.data.sex ? '未知' : res.data.sex,
+            birthDate: res.data.birthDate,
+            username: res.data.userName
+          });
         }
       })
   }, [props]);
 
   const changeInfo = () => {
     console.log('change.');
+  };
+
+  const handleChange = e => {
+    setFormInfo({
+      ...formInfo,
+      [e.target.id]: e.target.value
+    });
   };
 
 
@@ -62,19 +78,48 @@ const Profile = (props) => {
             <div className="modal-body">
               <form>
                 <div className="form-group">
-                  <label htmlFor="recipient-name" className="col-form-label">Recipient:</label>
-                  <input type="text" className="form-control" />
+                  <label htmlFor="username">用户名:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="username"
+                    value={formInfo.username}
+                    onChange={handleChange}
+                  />
                 </div>
+
                 <div className="form-group">
-                  <label htmlFor="message-text" className="col-form-label">Message:</label>
-                  <textarea className="form-control" id="message-text"></textarea>
+                  <label htmlFor="sex">性别:</label>
+                  <select
+                    type="text"
+                    className="form-control"
+                    id="sex"
+                    value={formInfo.sex}
+                    onChange={handleChange}
+                  >
+                  <option value="未知">未知</option>
+                  <option value="f">女</option>
+                  <option value="m">男</option>
+                  </select>
                 </div>
+
+                <div className="form-group">
+                  <label htmlFor="age">年龄:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="age"
+                    value={formInfo.age}
+                    onChange={handleChange}
+                  />
+                </div>
+
               </form>
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-              <button type="button" className="btn btn-secondary">确认修改</button>
+              <button className="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+              <button className="btn btn-secondary" onClick={changeInfo}>确认修改</button>
             </div>
 
           </div>
