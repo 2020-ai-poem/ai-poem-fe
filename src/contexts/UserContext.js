@@ -19,9 +19,9 @@ const UserContextProvider = (props) => {
     history.push('/');
   };
 
-  const update = (data) => {
-    console.log(data);
-    // api updata
+  const update = (user) => {
+    console.log(user);
+    // update directly
   };
 
   return (

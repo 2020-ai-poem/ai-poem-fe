@@ -46,7 +46,6 @@ const Signin = () => {
       info: user.info,
       password: sha256(user.password)
     };
-    console.log(data);
     api
       .login(data)
       .then(res => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 import api from '../../tools/api';
 import './profile.css';
@@ -12,12 +13,25 @@ const initInfo = {
   userName: ''
 };
 
+const initError = {
+  isError: false,
+  content: ''
+};
+
+const initSuccess = {
+  isSuccess: false,
+  content: ''
+};
+
 const Profile = (props) => {
+  const history = useHistory();
   const { user, update } = useContext(UserContext);
   const [formInfo, setFormInfo] = useState(initInfo);
   const [info, setInfo] = useState(initInfo);
-
-  console.log(formInfo);
+  const [count, setCount] = useState(0);
+  const [modifyInfo, setModifyInfo] = useState({});
+  const [error, setError] = useState(initError);
+  const [success, setSuccess] = useState(initSuccess);
 
   useEffect(() => {
     let data = {
@@ -27,10 +41,8 @@ const Profile = (props) => {
       .getInfo(data)
       .then(res => {
         if(res.status === 200 && !res.data.isOk) {
-          // not login
-          console.log(res.data);
+          history.push('/signin');
         } else if(res.status === 200 && res.data.isOk) {
-          console.log(res.data);
           setInfo({
             age: !res.data.age ? 0 : res.data.age,
             email: res.data.email,
@@ -40,22 +52,67 @@ const Profile = (props) => {
           });
         }
       })
-  }, [props]);
+  }, [props, history, count]);
 
   useEffect(() => {
     setFormInfo(info);
   }, [info]);
 
-  const changeInfo = () => {
-    console.log('changed.');
-  };
-
   const handleChange = e => {
+    setError(initError);
+    setSuccess(initSuccess);
     setFormInfo({
       ...formInfo,
       [e.target.id]: e.target.value
     });
+    setModifyInfo({
+      ...modifyInfo,
+      [e.target.id]: e.target.value
+    });
   };
+
+  const changeInfo = () => {
+    if(formInfo === info) {
+      setError({
+        isError: true,
+        content: '没有更改任何信息噢！'
+      });
+      return;
+    }
+    if(formInfo.age < 0) {
+      setError({
+        isError: true,
+        content: '年龄不能小于0噢!'
+      });
+      return;
+    }
+    console.log(modifyInfo);
+    api
+      .modifyInfo(modifyInfo)
+      .then(res => {
+        console.log(res);
+        if(res.status === 200 && res.data.isOk) {
+          setSuccess({
+            isSuccess: true,
+            content: '修改成功'
+          });
+          setCount(count++);
+          // update the data using the res.data
+        } else if(res.status === 200 && !res.data.isOk) {
+          setError({
+            isError: true,
+            content: res.data.errMsg
+          });
+        }
+      })
+      .catch(error => {
+        setError({
+          isError: true,
+          content: '修改信息失败'
+        });
+      })
+  };
+
 
 
   return (
@@ -110,12 +167,21 @@ const Profile = (props) => {
                     onChange={handleChange}
                   />
                 </div>
-
               </form>
+              { error.isError && (
+                <div className="alert alert-warning">{ error.content }</div>
+              ) }
+              { success.isSuccess && (
+                <div className="alert alert-success">{ success.content }</div>
+              ) }
             </div>
 
             <div className="modal-footer">
-              <button className="btn btn-outline-secondary" data-dismiss="modal">取消</button>
+              <button
+                className="btn btn-outline-secondary"
+                data-dismiss="modal"
+                onClick={() => { setFormInfo(info); setModifyInfo({});}}
+              >取消</button>
               <button className="btn btn-secondary" onClick={changeInfo}>确认修改</button>
             </div>
 
