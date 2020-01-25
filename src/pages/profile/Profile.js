@@ -5,18 +5,19 @@ import './profile.css';
 import '../../tools/becca.css';
 
 const initInfo = {
-  age: '...',
-  email: '...',
+  age: 0,
+  email: '',
   userId: 0,
-  sex: 'X',
-  birthDate: 'xxxx-xx-xx',
-  userName: 'username'
+  sex: '',
+  userName: ''
 };
 
 const Profile = (props) => {
   const { user, update } = useContext(UserContext);
   const [formInfo, setFormInfo] = useState(initInfo);
   const [info, setInfo] = useState(initInfo);
+
+  console.log(formInfo);
 
   useEffect(() => {
     let data = {
@@ -29,28 +30,24 @@ const Profile = (props) => {
           // not login
           console.log(res.data);
         } else if(res.status === 200 && res.data.isOk) {
+          console.log(res.data);
           setInfo({
-            age: !res.data.age ? '0' : res.data.age,
+            age: !res.data.age ? 0 : res.data.age,
             email: res.data.email,
             userId: res.data.userId,
             sex: !res.data.sex ? '未知' : res.data.sex,
-            birthDate: res.data.birthDate,
-            username: res.data.userName
-          });
-          setFormInfo({
-            age: !res.data.age ? '0' : res.data.age,
-            email: res.data.email,
-            userId: res.data.userId,
-            sex: !res.data.sex ? '未知' : res.data.sex,
-            birthDate: res.data.birthDate,
             username: res.data.userName
           });
         }
       })
   }, [props]);
 
+  useEffect(() => {
+    setFormInfo(info);
+  }, [info]);
+
   const changeInfo = () => {
-    console.log('change.');
+    console.log('changed.');
   };
 
   const handleChange = e => {
@@ -83,7 +80,7 @@ const Profile = (props) => {
                     type="text"
                     className="form-control"
                     id="username"
-                    value={formInfo.username}
+                    value={formInfo.username || ''}
                     onChange={handleChange}
                   />
                 </div>
@@ -94,7 +91,7 @@ const Profile = (props) => {
                     type="text"
                     className="form-control"
                     id="sex"
-                    value={formInfo.sex}
+                    value={formInfo.sex || ''}
                     onChange={handleChange}
                   >
                   <option value="未知">未知</option>
@@ -106,7 +103,7 @@ const Profile = (props) => {
                 <div className="form-group">
                   <label htmlFor="age">年龄:</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     id="age"
                     value={formInfo.age}
@@ -136,7 +133,8 @@ const Profile = (props) => {
           <p>性别：{ info.sex }</p>
           <p>年龄：{ info.age }</p>
         </div>
-        { user.userId === info.userId && (
+
+        { user && user.userId === info.userId && (
           <div className="change-info-btn">
             <button
               className="btn btn-outline-dark"
@@ -145,6 +143,7 @@ const Profile = (props) => {
             >修改信息</button>
           </div>
         ) }
+
       </div>
     </div>
   );
