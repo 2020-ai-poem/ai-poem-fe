@@ -1,0 +1,27 @@
+/* Create Poem */
+.circle-container {
+  text-align: center;
+}
+
+.circle-text {
+  width: 100px;
+  height: 100px;
+  color: #fff;
+  background: #333333;
+  text-align: center;
+  padding-top: 35px;
+  margin: 0 auto;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  box-shadow: 0 0 5px #333;
+}
+
+.circle-text:hover {
+  cursor: pointer;
+  box-shadow: 0 0 15px #333;
+}
+
+.circle-detail-text {
+  margin-top: 20px;
+  color: #636363;
+}
