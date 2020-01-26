@@ -8,7 +8,7 @@ const CreatePoem = () => {
   return (
     <div className="crate-poem container">
 
-      <h3 className="mt-5">创作：</h3>
+      <h4 className="mt-5">创作：</h4>
       <div className="row mt-4">
         <div className="col-sm-3">
           <div className="circle-container">
@@ -18,7 +18,7 @@ const CreatePoem = () => {
         </div>
       </div>
 
-      <h3 className="mt-5">辅助作诗（AI作诗）：</h3>
+      <h4 className="mt-5">辅助作诗（AI作诗）：</h4>
       <div className="row mt-4">
         <div className="col-sm-3">
           <div className="circle-container">
