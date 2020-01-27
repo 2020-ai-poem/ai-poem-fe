@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-light">
+    <nav className="navbar navbar-light sticky-top becca-navbar">
       <div>
         <Link to="/" className="navbar-brand h3 mr-2">AI Poem</Link>
       </div>
