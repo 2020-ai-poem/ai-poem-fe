@@ -1,24 +1,54 @@
 /* Create Poem */
+.create-poem {
+  padding: 3% 0 10%;
+}
+
 .circle-container {
   text-align: center;
 }
 
 .circle-text {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   color: #fff;
-  background: #333333;
   text-align: center;
   padding-top: 35px;
   margin: 0 auto;
   border-radius: 50%;
   font-size: 1.3rem;
-  box-shadow: 0 0 5px #333;
+  box-shadow: 0 0 5px #959393;
+}
+
+@media only screen and (max-width: 1000px) {
+  .circle-text {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.self-create-img {
+  background: url('../../assets/images/self-create.jpg');
+}
+
+.cangtou-img {
+  background: url('../../assets/images/cangtou.jpg');
+}
+
+.emotion-img {
+  background: url('../../assets/images/emotion.jpg');
+}
+
+.style-img {
+  background: url('../../assets/images/style.jpg');
+}
+
+.jielong-img {
+  background: url('../../assets/images/jielong.jpg');
 }
 
 .circle-text:hover {
   cursor: pointer;
-  box-shadow: 0 0 15px #333;
+  box-shadow: 0 0 15px #959393;
 }
 
 .circle-detail-text {
