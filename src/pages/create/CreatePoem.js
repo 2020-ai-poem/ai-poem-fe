@@ -10,6 +10,7 @@ const CreatePoem = () => {
       <div className="becca-bread">
         <span className="becca-bread-text">作诗</span>
       </div>
+
       <div className="container becca-card">
 
         <h4>辅助作诗（AI作诗）：</h4>
