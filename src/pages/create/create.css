@@ -59,14 +59,14 @@
 }
 
 .poem-form {
-  padding: 25% 5%;
+  padding: 20% 5%;
   height: 500px;
 }
 
 @media only screen and (max-width: 575px) {
   .poem-form {
-    padding: 20% 5%;
-    height: 200px;
+    height: 100%;
+    padding: 5%;
   }
 }
 
@@ -76,12 +76,23 @@
 
 /* Poem Result */
 .result {
-  font-family: STKaiti, KaiTi;
+  font-family: 'Ma Shan Zheng', cursive;
   color: #4f4d4d;
   width: 300px;
-  height: 450px;
-  margin: 5% auto;
-  box-shadow: 0 0 5px #eee;
+  height: 500px;
+  margin: 0 auto;
+  box-shadow: 0 0 5px #a2a2a2;
+  border: #dededf 1px solid;
+  border-radius: 3px;
+}
+
+.null-result {
+  width: 300px;
+  height: 500px;
+  margin: 0 auto;
+  border: #dededf 1px solid;
+  border-radius: 3px;
+  background: url('../../assets/images/null.jpg');
 }
 
 .result-poem-container {
@@ -106,7 +117,7 @@
 
 .result-author-container {
   writing-mode: vertical-rl;
-  margin: 340px 0 0 30px;
+  margin: 380px 0 0 30px;
 }
 
 .result-stamp {
