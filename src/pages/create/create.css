@@ -53,11 +53,79 @@
   color: #636363;
 }
 
-/* CangTou */
-.cangtou-form {
-  margin-top: 10%;
+/* Public */
+.poem-row {
+  height: 100%;
 }
 
+.poem-form {
+  padding: 25% 5%;
+  height: 500px;
+}
+
+@media only screen and (max-width: 575px) {
+  .poem-form {
+    padding: 20% 5%;
+    height: 200px;
+  }
+}
+
+.result-container {
+  height: 500px;
+}
+
+/* Poem Result */
+.result {
+  font-family: STKaiti, KaiTi;
+  color: #4f4d4d;
+  width: 300px;
+  height: 450px;
+  margin: 5% auto;
+  box-shadow: 0 0 5px #eee;
+}
+
+.result-poem-container {
+  margin: 10% 0 0 10%;
+  font-size: 1.4rem;
+  writing-mode: vertical-rl;
+}
+
+.result-poem-title {
+  margin-left: 10px;
+  writing-mode: vertical-rl;
+}
+
+.result-poem {
+  writing-mode: vertical-rl;
+}
+
+.result-author {
+  font-size: 1.2rem;
+  writing-mode: vertical-rl;
+}
+
+.result-author-container {
+  writing-mode: vertical-rl;
+  margin: 340px 0 0 30px;
+}
+
+.result-stamp {
+  display: inline-block;
+  margin-top: 10px;
+  text-align: center;
+  border-radius: 3px;
+  background: #920000;
+  height: 25px;
+  weight: 25px;
+  color: #fff;
+  writing-mode: vertical-rl;
+}
+
+.result-poem:first-letter {
+  color: #920000;
+}
+
+/* CangTou */
 .cangtou-btn {
   margin-top: 10%;
   text-align: center;
