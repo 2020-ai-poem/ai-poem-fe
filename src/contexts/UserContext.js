@@ -16,7 +16,7 @@ const UserContextProvider = (props) => {
   const logout = () => {
     localStorage.removeItem('user');
     setUser(null);
-    history.push('/');
+    history.push('/signin');
   };
 
   const update = (user) => {

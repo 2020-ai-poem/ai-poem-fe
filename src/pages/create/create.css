@@ -1,5 +1,4 @@
 /* Create Poem */
-
 .circle-container {
   text-align: center;
 }
@@ -59,7 +58,7 @@
 }
 
 .poem-form {
-  padding: 20% 5%;
+  padding: 15% 5%;
   height: 500px;
 }
 
@@ -68,6 +67,11 @@
     height: 100%;
     padding: 5%;
   }
+}
+
+.poem-btn {
+  margin-top: 10%;
+  text-align: center;
 }
 
 .result-container {
@@ -92,7 +96,14 @@
   margin: 0 auto;
   border: #dededf 1px solid;
   border-radius: 3px;
-  background: url('../../assets/images/null.jpg');
+}
+
+.cangtou-null {
+  background: url('../../assets/images/cangtou-null.jpg');
+}
+
+.self-null {
+  background: url('../../assets/images/self-null.jpg');
 }
 
 .result-poem-container {
@@ -132,12 +143,9 @@
   writing-mode: vertical-rl;
 }
 
-.result-poem:first-letter {
+/* CangTou */
+.cangtou-poem:first-letter {
   color: #920000;
 }
 
-/* CangTou */
-.cangtou-btn {
-  margin-top: 10%;
-  text-align: center;
-}
+/* Self Create */

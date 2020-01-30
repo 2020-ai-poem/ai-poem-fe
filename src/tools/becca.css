@@ -13,11 +13,23 @@
 }
 
 .becca-container {
-  width: 50%;
+  width: 30%;
   margin: 5% auto;
 }
 
+@media screen and (max-width: 1000px) {
+  .becca-container {
+    width: 40%;
+  }
+}
+
 @media screen and (max-width: 800px) {
+  .becca-container {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 500px) {
   .becca-container {
     width: 80%;
   }

@@ -65,6 +65,7 @@ const CangTou = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    setResult(null);
 
     if(!poem.content) {
       setError({
@@ -107,7 +108,7 @@ const CangTou = () => {
 
       setTimeout(() => {
         setSuccess(false);
-      }, [1000]);
+      }, [2000]);
     }, [2000]);
   };
 
@@ -191,13 +192,13 @@ const CangTou = () => {
                   </div>
                 ) }
 
-                <div className="cangtou-btn">
+                <div className="poem-btn">
                   <button
                     className="btn btn-light"
                     onClick={handleSubmit}
                   >
                     { btnLoading && (
-                      <span className="spinner-border spinner-border-sm mr-3"></span>
+                      <span className="mr-2 spinner-grow spinner-grow-sm"></span>
                     ) }
                     生成
                   </button>
@@ -213,23 +214,23 @@ const CangTou = () => {
                   <div className='row'>
                     <div className='col-3'>
                       <div className="result-author-container">
-                        <span className="result-author">{ resultPoem.author }</span>
+                        <span className="result-author">{ result.author }</span>
                         <span className="result-stamp">印</span>
                       </div>
                     </div>
 
                     <div className="col-9">
                       <div className="result-poem-container">
-                        <div className="result-poem-title">{ resultPoem.title }</div>
-                          { resultPoem.content.length && resultPoem.content.map((result, index) => (
-                            <div key={index} className="result-poem">{ result }</div>
+                        <div className="result-poem-title">{ result.title }</div>
+                          { result.content.length && result.content.map((item, index) => (
+                            <div key={index} className="result-poem cangtou-poem">{ item }</div>
                           )) }
                       </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="null-result"></div>
+                <div className="cangtou-null null-result"></div>
               ) }
 
             </div>
