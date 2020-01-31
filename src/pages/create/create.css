@@ -59,13 +59,12 @@
 
 .poem-form {
   padding: 15% 5%;
-  height: 500px;
+  height: 100%;
 }
 
 @media only screen and (max-width: 575px) {
   .poem-form {
     height: 100%;
-    padding: 5%;
   }
 }
 
@@ -75,7 +74,7 @@
 }
 
 .result-container {
-  height: 500px;
+  height: 100%;
 }
 
 /* Poem Result */

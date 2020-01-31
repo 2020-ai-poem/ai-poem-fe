@@ -5,8 +5,9 @@ const initPoem = {
   num: 5,
   kind: 1,
   title: '无题',
-  content: '',
-  author: ''
+  cangtou: '',
+  author: '',
+  type: 'cangtou'
 };
 
 const initError = {
@@ -67,7 +68,7 @@ const CangTou = () => {
     e.preventDefault();
     setResult(null);
 
-    if(!poem.content) {
+    if(!poem.cangtou) {
       setError({
         isError: true,
         content: '藏头不能为空噢！'
@@ -75,7 +76,7 @@ const CangTou = () => {
       return;
     }
 
-    if(!isChinese(poem.content)) {
+    if(!isChinese(poem.cangtou)) {
       setError({
         isError: true,
         content: '藏头需要是中文噢！'
@@ -83,7 +84,7 @@ const CangTou = () => {
       return;
     }
 
-    if(poem.content.length !== 4) {
+    if(poem.cangtou.length !== 4) {
       setError({
         isError: true,
         content: '藏头长度需为四噢！'
@@ -129,8 +130,8 @@ const CangTou = () => {
                 <input
                   className="form-control"
                   placeholder="四字（如：新年快乐）"
-                  id="content"
-                  value={poem.content}
+                  id="cangtou"
+                  value={poem.cangtou}
                   onChange={handleChange}
                   autoComplete="off"
                 />
@@ -210,23 +211,34 @@ const CangTou = () => {
             <div className="result-container">
 
               { result ? (
-                <div className="result">
-                  <div className='row'>
-                    <div className='col-3'>
-                      <div className="result-author-container">
-                        <span className="result-author">{ result.author }</span>
-                        <span className="result-stamp">印</span>
+                <div>
+                  <div className="result">
+                    <div className='row'>
+                      <div className='col-3'>
+                        <div className="result-author-container">
+                          <span className="result-author">{ result.author }</span>
+                          <span className="result-stamp">印</span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="col-9">
-                      <div className="result-poem-container">
-                        <div className="result-poem-title">{ result.title }</div>
-                          { result.content.length && result.content.map((item, index) => (
-                            <div key={index} className="result-poem cangtou-poem">{ item }</div>
-                          )) }
+                      <div className="col-9">
+                        <div className="result-poem-container">
+                          <div className="result-poem-title">{ result.title }</div>
+                            { result.content.length && result.content.map((item, index) => (
+                              <div key={index} className="result-poem cangtou-poem">{ item }</div>
+                            )) }
+                        </div>
                       </div>
                     </div>
+                  </div>
+                  <div className="text-center mt-5">
+                    <button
+                      className="btn btn-dark"
+                      style={{
+                        background: '#870002',
+                        border: 'none'
+                      }}
+                    >收藏</button>
                   </div>
                 </div>
               ) : (

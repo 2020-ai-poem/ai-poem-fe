@@ -16,6 +16,17 @@ const initError = {
   content: ''
 };
 
+const resultPoem = {
+  content: [
+    '君不见，黄河之水天上来，奔流到海不复回。',
+    '君不见，高堂明镜悲白发，朝如青丝暮成雪。',
+    '人生得意须尽欢，莫使金樽空对月。',
+    '天生我材必有用，千金散尽还复来。'
+  ],
+  title: '将进酒',
+  author: '李白'
+};
+
 
 const SelfCreate = () => {
   const [poem, setPoem] = useState(initPoem);
@@ -69,6 +80,19 @@ const SelfCreate = () => {
         setSuccess(false);
       }, [2000]);
     }, [2000]);
+  };
+
+  const handlePublish = () => {
+    let data = {};
+    data.title = result.title;
+    data.author = result.author;
+    data.type = 'selfCreate';
+    let newContent = '';
+    for(let i = 0; i < result.content.length; i++) {
+      newContent += result.content[i];
+    }
+    data.content = newContent;
+    console.log(data);
   };
 
   return (
@@ -156,23 +180,36 @@ const SelfCreate = () => {
             <div className="result-container">
 
               { result ? (
-                <div className="result">
-                  <div className='row'>
-                    <div className='col-3'>
-                      <div className="result-author-container">
-                        <span className="result-author">{ result.author }</span>
-                        <span className="result-stamp">印</span>
+                <div>
+                  <div className="result">
+                    <div className='row'>
+                      <div className='col-3'>
+                        <div className="result-author-container">
+                          <span className="result-author">{ result.author }</span>
+                          <span className="result-stamp">印</span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="col-9">
-                      <div className="result-poem-container">
-                        <div className="result-poem-title">{ result.title }</div>
-                          { result.content.length && result.content.map((item, index) => (
-                            <div key={index} className="result-poem">{ item }</div>
-                          )) }
+                      <div className="col-9">
+                        <div className="result-poem-container">
+                          <div className="result-poem-title">{ result.title }</div>
+                            { result.content.length && result.content.map((item, index) => (
+                              <div key={index} className="result-poem">{ item }</div>
+                            )) }
+                        </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="text-center mt-5">
+                    <button
+                      className="btn btn-dark"
+                      style={{
+                        background: '#870002',
+                        border: 'none'
+                      }}
+                      onClick={handlePublish}
+                    >发布</button>
                   </div>
                 </div>
               ) : (
