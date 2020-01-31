@@ -4,8 +4,8 @@
 }
 
 .circle-text {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   color: #fff;
   text-align: center;
   padding-top: 35px;
@@ -82,11 +82,12 @@
   font-family: 'Ma Shan Zheng', cursive;
   color: #4f4d4d;
   width: 300px;
-  height: 500px;
+  height: 100%;
   margin: 0 auto;
   box-shadow: 0 0 5px #a2a2a2;
   border: #dededf 1px solid;
   border-radius: 3px;
+  padding-bottom: 20px;
 }
 
 .null-result {
@@ -103,6 +104,10 @@
 
 .self-null {
   background: url('../../assets/images/self-null.jpg');
+}
+
+.jielong-null {
+  background: url('../../assets/images/jielong-null.jpg');
 }
 
 .result-poem-container {
@@ -147,4 +152,7 @@
   color: #920000;
 }
 
-/* Self Create */
+/* JieLong */
+.jielong-poem {
+  color: #920000;
+}

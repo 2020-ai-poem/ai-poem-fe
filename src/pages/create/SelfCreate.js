@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
+import Result from '../../components/poem/Result';
 
 const initPoem = {
   title: '',
@@ -181,26 +182,7 @@ const SelfCreate = () => {
 
               { result ? (
                 <div>
-                  <div className="result">
-                    <div className='row'>
-                      <div className='col-3'>
-                        <div className="result-author-container">
-                          <span className="result-author">{ result.author }</span>
-                          <span className="result-stamp">印</span>
-                        </div>
-                      </div>
-
-                      <div className="col-9">
-                        <div className="result-poem-container">
-                          <div className="result-poem-title">{ result.title }</div>
-                            { result.content.length && result.content.map((item, index) => (
-                              <div key={index} className="result-poem">{ item }</div>
-                            )) }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+                  <Result result={result} />
                   <div className="text-center mt-5">
                     <button
                       className="btn btn-dark"
