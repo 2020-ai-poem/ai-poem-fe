@@ -164,3 +164,26 @@
 .jielong-poem {
   color: #920000;
 }
+
+/* Style */
+.poem-label {
+  color: #5c5b5c;
+  display: inline-block;
+  padding: 3px 15px;
+  border-radius: 5px;
+  margin: 5px 3px 0;
+  cursor: pointer;
+  background: #e5e4e5;
+}
+
+.poem-label-active {
+  background: #dcdbdc;
+  color: #2c2c2c;
+  font-weight: bold;
+}
+
+.poem-label:hover {
+  background: #dcdbdc;
+  color: #2c2c2c;
+  font-weight: bold;
+}
