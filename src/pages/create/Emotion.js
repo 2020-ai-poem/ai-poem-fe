@@ -58,6 +58,7 @@ const Emotion = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    setResult(null);
 
     if(!poem.emotion || !poem.author) {
       setError({

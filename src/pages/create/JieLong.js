@@ -67,7 +67,6 @@ const JieLong = () => {
       return;
     }
 
-
     if(poem.num === 5 && poem.jielong.length !== 5) {
       setError({
         isError: true,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Result from '../../components/poem/Result';
 
 const labels = ['喜悦', '乐观', '萧瑟凄凉', '忆旧', '孤寂惆怅', '烦恼', '思乡忧老', '渺远孤逸'];
 
@@ -18,6 +19,11 @@ const initError = {
   content: ''
 };
 
+const resultPoem = {
+  title: '春望',
+  author: '杜甫',
+  content: '国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。'
+};
 
 const Style = () => {
   const [poem, setPoem] = useState(initPoem);
@@ -64,7 +70,56 @@ const Style = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    setResult(null);
+
+    if(!poem.style) {
+      setError({
+        isError: true,
+        content: '诗歌没有选择风格噢！'
+      });
+      return;
+    }
+
+    if(!poem.description) {
+      setError({
+        isError: true,
+        content: '需要给诗歌加上关键词描述噢！'
+      });
+      return;
+    }
+
+    if(!poem.author) {
+      setError({
+        isError: true,
+        content: '诗歌还没有署名噢！'
+      });
+      return;
+    }
+
     console.log(poem);
+
+    setBtnLoading(true);
+
+    let newContent = resultPoem.content.split('。');
+    for(let i = 0; i < newContent.length; i++) {
+      if(!newContent[i]) continue;
+      newContent[i] += '。'
+    }
+
+    let data = resultPoem;
+    data.content = newContent;
+
+    setTimeout(() => {
+      setSuccess(true);
+      setBtnLoading(false);
+      setResult(data);
+
+      setTimeout(() => {
+        setSuccess(false);
+      }, [2000]);
+
+    }, [2000]);
+    console.log(data);
   };
 
   return (
@@ -178,7 +233,28 @@ const Style = () => {
 
             </form>
           </div>
-          <div className="col-md-6">result</div>
+          <div className="col-md-6">
+          <div className="result-container">
+
+            { result ? (
+              <div>
+                <Result result={result} />
+                <div className="text-center mt-5">
+                  <button
+                    className="btn btn-dark"
+                    style={{
+                      background: '#870002',
+                      border: 'none'
+                    }}
+                  >收藏</button>
+                </div>
+              </div>
+            ) : (
+              <div className="style-null null-result"></div>
+            ) }
+
+          </div>
+          </div>
         </div>
       </div>
     </div>

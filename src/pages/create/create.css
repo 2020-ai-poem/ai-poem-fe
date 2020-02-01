@@ -114,6 +114,10 @@
   background: url('../../assets/images/emotion-null.jpg');
 }
 
+.style-null {
+  background: url('../../assets/images/style-null.jpg');
+}
+
 .result-poem-container {
   float: right;
   height: 500px;
