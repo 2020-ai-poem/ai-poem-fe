@@ -47,6 +47,8 @@ const SelfCreate = () => {
 
   const handleGenerate = e => {
     e.preventDefault();
+    setResult(null);
+    
     if(!poem.title || !poem.author || !poem.shoulian) {
       setError({
         isError: true,

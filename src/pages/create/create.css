@@ -110,8 +110,14 @@
   background: url('../../assets/images/jielong-null.jpg');
 }
 
+.emotion-null {
+  background: url('../../assets/images/emotion-null.jpg');
+}
+
 .result-poem-container {
-  margin: 10% 0 0 10%;
+  float: right;
+  height: 500px;
+  margin: 10% 10% 0 0;
   font-size: 1.4rem;
   writing-mode: vertical-rl;
 }
@@ -132,7 +138,9 @@
 
 .result-author-container {
   writing-mode: vertical-rl;
-  margin: 380px 0 0 30px;
+  position: absolute;
+  bottom: 0px;
+  left: 30px;
 }
 
 .result-stamp {

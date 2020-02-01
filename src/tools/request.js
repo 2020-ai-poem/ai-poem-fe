@@ -17,9 +17,8 @@ request.interceptors.request.use(
     if(token) {
       config.headers.Authorization = token;
     }
-
 		if (config.method === 'post' && config.data) {
-			config.data = qs.stringify(config.data)
+			config.data = qs.stringify(config.data);
 		}
 		return config;
 	},

@@ -51,6 +51,8 @@ const CangTou = () => {
   };
 
   const handleNumChange = e => {
+    setError(initError);
+
     setPoem({
       ...poem,
       num: parseInt(e.target.value)
@@ -58,6 +60,8 @@ const CangTou = () => {
   };
 
   const handleKindChange = e => {
+    setError(initError);
+
     setPoem({
       ...poem,
       kind: parseInt(e.target.value)

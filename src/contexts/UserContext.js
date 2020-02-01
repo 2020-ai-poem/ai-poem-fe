@@ -1,6 +1,5 @@
 import React, { useState, createContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import api from '../tools/api';
 
 export const UserContext = createContext();
 
@@ -20,8 +19,8 @@ const UserContextProvider = (props) => {
   };
 
   const update = (user) => {
-    console.log(user);
-    // update directly
+    localStorage.setItem('user', JSON.stringify(user));
+    setUser(JSON.stringify(user));
   };
 
   return (

@@ -26,10 +26,11 @@ const initSuccess = {
 const Profile = (props) => {
   const history = useHistory();
   const { user, update } = useContext(UserContext);
+
   const [formInfo, setFormInfo] = useState(initInfo);
   const [info, setInfo] = useState(initInfo);
-  const [count, setCount] = useState(0);
   const [modifyInfo, setModifyInfo] = useState({});
+  const [getInfo, setGetInfo] = useState(false);
   const [error, setError] = useState(initError);
   const [success, setSuccess] = useState(initSuccess);
 
@@ -52,15 +53,17 @@ const Profile = (props) => {
           });
         }
       })
-  }, [props, history, count]);
+  }, [props, history, getInfo]);
 
   useEffect(() => {
     setFormInfo(info);
-  }, [info]);
+    update(info);
+  }, [info, update]);
 
   const handleChange = e => {
     setError(initError);
     setSuccess(initSuccess);
+
     setFormInfo({
       ...formInfo,
       [e.target.id]: e.target.value
@@ -86,22 +89,26 @@ const Profile = (props) => {
       });
       return;
     }
-    console.log(modifyInfo);
+    if(modifyInfo.age) {
+      modifyInfo.age = parseInt(modifyInfo.age)
+    }
     api
       .modifyInfo(modifyInfo)
       .then(res => {
-        console.log(res);
         if(res.status === 200 && res.data.isOk) {
           setSuccess({
             isSuccess: true,
             content: '修改成功'
           });
-          setCount(count++);
-          // update the data using the res.data
+          setGetInfo(!getInfo);
+
+          setTimeout(() => {
+            setSuccess(initSuccess);
+          }, [2000]);
         } else if(res.status === 200 && !res.data.isOk) {
           setError({
             isError: true,
-            content: res.data.errMsg
+            content: res.data.errmsg
           });
         }
       })
@@ -151,9 +158,9 @@ const Profile = (props) => {
                     value={formInfo.sex || ''}
                     onChange={handleChange}
                   >
-                  <option value="未知">未知</option>
-                  <option value="f">女</option>
-                  <option value="m">男</option>
+                    <option value="未知">未知</option>
+                    <option value="女">女</option>
+                    <option value="男">男</option>
                   </select>
                 </div>
 

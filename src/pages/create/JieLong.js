@@ -10,6 +10,11 @@ const initPoem = {
   type: 'jielong'
 };
 
+const initError = {
+  isError: false,
+  content: ''
+};
+
 const resultPoem = {
   title: '春望',
   author: '杜甫',
@@ -19,9 +24,13 @@ const resultPoem = {
 const JieLong = () => {
   const [poem, setPoem] = useState(initPoem);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(initError);
+  const [success, setSuccess] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
 
   const handleChange = e => {
+    setError(initError);
+
     setPoem({
       ...poem,
       [e.target.id]: e.target.value
@@ -29,6 +38,8 @@ const JieLong = () => {
   };
 
   const handleNumChange = e => {
+    setError(initError);
+
     setPoem({
       ...poem,
       num: parseInt(e.target.value)
@@ -36,6 +47,8 @@ const JieLong = () => {
   };
 
   const handleKindChange = e => {
+    setError(initError);
+
     setPoem({
       ...poem,
       kind: parseInt(e.target.value)
@@ -44,8 +57,36 @@ const JieLong = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    setResult(null);
+
+    if(!poem.title || !poem.author || !poem.jielong) {
+      setError({
+        isError: true,
+        content: '诗词不完整噢!'
+      });
+      return;
+    }
+
+
+    if(poem.num === 5 && poem.jielong.length !== 5) {
+      setError({
+        isError: true,
+        content: '言体为五言意味着你的首句需要为五个字噢！'
+      });
+      return;
+    }
+
+    if(poem.num === 7 && poem.jielong.length !== 7) {
+      setError({
+        isError: true,
+        content: '言体为七言意味着你的首句需要为七个字噢！'
+      });
+      return;
+    }
 
     console.log(poem);
+
+    setBtnLoading(true);
 
     let newContent = resultPoem.content.split('。');
     for(let i = 0; i < newContent.length; i++) {
@@ -56,7 +97,16 @@ const JieLong = () => {
     let data = resultPoem;
     data.content = newContent;
 
-    setResult(data);
+    setTimeout(() => {
+      setSuccess(true);
+      setBtnLoading(false);
+      setResult(data);
+
+      setTimeout(() => {
+        setSuccess(false);
+      }, [2000]);
+
+    }, [2000]);
     console.log(data);
 
   };
@@ -139,6 +189,19 @@ const JieLong = () => {
                   />律诗
                 </div>
               </div>
+
+              { error.isError && (
+                <div className="alert alert-warning mt-4">
+                { error.content }
+                </div>
+              ) }
+
+              { success && (
+                <div className="alert alert-success mt-4">
+                  生成成功！
+                </div>
+              ) }
+
               <div className="poem-btn">
                 <button
                   className="btn btn-light"
