@@ -51,14 +51,20 @@ const Profile = (props) => {
             sex: !res.data.sex ? '未知' : res.data.sex,
             username: res.data.userName
           });
+          update({
+            age: !res.data.age ? 0 : res.data.age,
+            email: res.data.email,
+            userId: res.data.userId,
+            sex: !res.data.sex ? '未知' : res.data.sex,
+            username: res.data.userName
+          });
         }
       })
-  }, [props, history, getInfo]);
+  }, [props, history, getInfo, update]);
 
   useEffect(() => {
     setFormInfo(info);
-    update(info);
-  }, [info, update]);
+  }, [info]);
 
   const handleChange = e => {
     setError(initError);

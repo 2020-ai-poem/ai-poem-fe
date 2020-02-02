@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../contexts/UserContext';
 import Result from '../../components/poem/Result';
 
 const initPoem = {
@@ -17,16 +16,16 @@ const initError = {
   content: ''
 };
 
-const resultPoem = {
-  content: [
-    '君不见，黄河之水天上来，奔流到海不复回。',
-    '君不见，高堂明镜悲白发，朝如青丝暮成雪。',
-    '人生得意须尽欢，莫使金樽空对月。',
-    '天生我材必有用，千金散尽还复来。'
-  ],
-  title: '将进酒',
-  author: '李白'
-};
+// const resultPoem = {
+//   content: [
+//     '君不见，黄河之水天上来，奔流到海不复回。',
+//     '君不见，高堂明镜悲白发，朝如青丝暮成雪。',
+//     '人生得意须尽欢，莫使金樽空对月。',
+//     '天生我材必有用，千金散尽还复来。'
+//   ],
+//   title: '将进酒',
+//   author: '李白'
+// };
 
 
 const SelfCreate = () => {
@@ -48,7 +47,7 @@ const SelfCreate = () => {
   const handleGenerate = e => {
     e.preventDefault();
     setResult(null);
-    
+
     if(!poem.title || !poem.author || !poem.shoulian) {
       setError({
         isError: true,

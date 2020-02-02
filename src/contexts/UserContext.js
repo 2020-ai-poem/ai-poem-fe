@@ -13,6 +13,7 @@ const UserContextProvider = (props) => {
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
     history.push('/signin');
