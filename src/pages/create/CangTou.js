@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../../tools/api';
 
 const initPoem = {
   num: 5,
@@ -13,17 +14,6 @@ const initPoem = {
 const initError = {
   isError: false,
   content: ''
-};
-
-const resultPoem = {
-  content: [
-    '新月发白日，一杯一春歇。',
-    '年累形易照，如遂出方舟。',
-    '快竿吹噪绚，山坂与鸿旖。',
-    '乐宴云时掩，吴鱼闭紫薇。'
-  ],
-  title: '无题',
-  author: '徐霜玉'
 };
 
 const isChinese = (str) => {
@@ -105,16 +95,64 @@ const CangTou = () => {
     }
 
     setBtnLoading(true);
-    setTimeout(() => {
-      setBtnLoading(false);
-      setResult(resultPoem);
-      console.log(poem);
-      setSuccess(true);
 
-      setTimeout(() => {
-        setSuccess(false);
-      }, [2000]);
-    }, [2000]);
+    api
+      .createCangtou(poem)
+      .then(res => {
+        if(res.status === 200 && res.data.isOk) {
+
+          let newContent = [];
+
+          // format for cangtou
+          if(poem.kind === 2) {
+            newContent = res.data.poem.split('。');
+            for(let i = 0; i < newContent.length; i++) {
+              if(!newContent[i]) continue;
+              newContent[i] += '。'
+            }
+          }
+
+          if(poem.kind === 1) {
+            newContent = res.data.poem.split(/，|。/);
+            for(let i = 0; i < newContent.length; i++) {
+              if(!newContent[i]) continue;
+              if(i % 2) {
+                newContent[i] += '。';
+              } else {
+                newContent[i] += '，';
+              }
+            }
+          }
+
+          let data = {
+            author: poem.author,
+            title: poem.title,
+            content: newContent
+          };
+
+          setBtnLoading(false);
+          setResult(data);
+          setSuccess(true);
+
+          setTimeout(() => {
+            setSuccess(false);
+          }, [2000]);
+        } else {
+          setBtnLoading(false);
+          setError({
+            isError: true,
+            content: res.data.errmsg
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setBtnLoading(false);
+        setError({
+          isError: true,
+          content: '服务器出错'
+        });
+      })
   };
 
   return (
@@ -215,34 +253,23 @@ const CangTou = () => {
             <div className="result-container">
 
               { result ? (
-                <div>
-                  <div className="result">
-                    <div className='row'>
-                      <div className='col-3'>
-                        <div className="result-author-container">
-                          <span className="result-author">{ result.author }</span>
-                          <span className="result-stamp">印</span>
-                        </div>
-                      </div>
-
-                      <div className="col-9">
-                        <div className="result-poem-container">
-                          <div className="result-poem-title">{ result.title }</div>
-                            { result.content.length && result.content.map((item, index) => (
-                              <div key={index} className="result-poem cangtou-poem">{ item }</div>
-                            )) }
-                        </div>
+                <div className="result">
+                  <div className='row'>
+                    <div className='col-3'>
+                      <div className="result-author-container">
+                        <span className="result-author">{ result.author }</span>
+                        <span className="result-stamp">印</span>
                       </div>
                     </div>
-                  </div>
-                  <div className="text-center mt-5">
-                    <button
-                      className="btn btn-dark"
-                      style={{
-                        background: '#870002',
-                        border: 'none'
-                      }}
-                    >收藏</button>
+
+                    <div className="col-9">
+                      <div className="result-poem-container">
+                        <div className="result-poem-title">{ result.title }</div>
+                          { result.content.length && result.content.map((item, index) => (
+                            <div key={index} className="result-poem cangtou-poem">{ item }</div>
+                          )) }
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (

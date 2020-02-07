@@ -9,4 +9,6 @@ export default {
   // profile
   getInfo: (data) => request.post('/getInfo', data),
   modifyInfo: (data) => request.post('/modifyInfo', data),
+  // create poem
+  createCangtou: (data) => request.post('/createCangtou', data),
 };
