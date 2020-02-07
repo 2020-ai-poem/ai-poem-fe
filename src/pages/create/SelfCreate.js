@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Result from '../../components/poem/Result';
+import api from '../../tools/api';
 
 const initPoem = {
   title: '',
@@ -12,6 +13,11 @@ const initPoem = {
 };
 
 const initError = {
+  isError: false,
+  content: ''
+};
+
+const initPublishErr = {
   isError: false,
   content: ''
 };
@@ -32,8 +38,10 @@ const SelfCreate = () => {
   const [poem, setPoem] = useState(initPoem);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(initError);
+  const [publishErr, setPublishErr] = useState(initPublishErr);
   const [success, setSuccess] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+  const [publishBtn, setPublishBtn] = useState(false);
 
   const handleChange = e => {
     setError(initError);
@@ -76,25 +84,56 @@ const SelfCreate = () => {
     setTimeout(() => {
       setResult(newResult);
       setBtnLoading(false);
-      setSuccess(true);
-
-      setTimeout(() => {
-        setSuccess(false);
-      }, [2000]);
     }, [2000]);
   };
 
   const handlePublish = () => {
+    setPublishBtn(true);
+
     let data = {};
     data.title = result.title;
     data.author = result.author;
     data.type = 'selfCreate';
+
     let newContent = '';
     for(let i = 0; i < result.content.length; i++) {
       newContent += result.content[i];
     }
     data.content = newContent;
-    console.log(data);
+
+    api
+      .createSelf(data)
+      .then(res => {
+        if(res.status === 200 && res.data.isOk) {
+          setPublishBtn(false);
+          setSuccess(true);
+
+          setTimeout(() => {
+            setSuccess(false);
+          }, 2000);
+        } else {
+          setPublishBtn(false);
+          setPublishErr({
+            isError: true,
+            content: res.data.errmsg
+          });
+
+          setTimeout(() => {
+            setPublishErr(initPublishErr);
+          }, 2000);
+        }
+      })
+      .catch(error => {
+        setPublishBtn(false);
+        setPublishErr({
+          isError: true,
+          content: '服务器出错啦！发布失败'
+        });
+
+        setTimeout(() => {
+          setPublishErr(initPublishErr);
+        }, 2000);
+      })
   };
 
   return (
@@ -159,12 +198,6 @@ const SelfCreate = () => {
                 </div>
               ) }
 
-              { success && (
-                <div className="alert alert-success mt-4">
-                  生成成功！
-                </div>
-              ) }
-
               <div className="poem-btn">
                 <button
                   className="btn btn-light"
@@ -180,10 +213,28 @@ const SelfCreate = () => {
           </div>
           <div className="col-md-6">
             <div className="result-container">
-
               { result ? (
                 <div>
                   <Result result={result} />
+
+                  { success && (
+                    <div
+                      style={{ width: '300px', margin: '0 auto' }}
+                      className="alert alert-success mt-4"
+                    >
+                      发布成功！
+                    </div>
+                  ) }
+
+                  { publishErr.isError && (
+                    <div
+                      style={{ width: '300px', margin: '0 auto' }}
+                      className="alert alert-warning mt-4"
+                    >
+                    { publishErr.content }
+                    </div>
+                  ) }
+
                   <div className="text-center mt-5">
                     <button
                       className="btn btn-dark"
@@ -192,7 +243,12 @@ const SelfCreate = () => {
                         border: 'none'
                       }}
                       onClick={handlePublish}
-                    >发布</button>
+                    >
+                      { publishBtn && (
+                        <span className="mr-2 spinner-grow spinner-grow-sm"></span>
+                      ) }
+                      发布
+                    </button>
                   </div>
                 </div>
               ) : (

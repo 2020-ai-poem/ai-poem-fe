@@ -11,4 +11,5 @@ export default {
   modifyInfo: (data) => request.post('/modifyInfo', data),
   // create poem
   createCangtou: (data) => request.post('/createCangtou', data),
+  createSelf: (data) => request.post('/createSelf', data),
 };
