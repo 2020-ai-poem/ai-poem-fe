@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Result from '../../components/poem/Result';
+import api from '../../tools/api';
 
 const initPoem = {
   num: 5,
@@ -83,31 +85,45 @@ const JieLong = () => {
       return;
     }
 
-    console.log(poem);
-
     setBtnLoading(true);
 
-    let newContent = resultPoem.content.split('。');
-    for(let i = 0; i < newContent.length; i++) {
-      if(!newContent[i]) continue;
-      newContent[i] += '。'
-    }
+    api
+      .createJielong(poem)
+      .then(res => {
+        if(res.status === 200 && res.data.isOk) {
+          let newContent = res.data.poem.split('。');
+          for(let i = 0; i < newContent.length; i++) {
+            if(!newContent[i]) continue;
+            newContent[i] += '。'
+          }
+          let data = {
+            author: poem.author,
+            title: poem.title,
+            content: newContent
+          };
 
-    let data = resultPoem;
-    data.content = newContent;
+          setBtnLoading(false);
+          setResult(data);
+          setSuccess(true);
 
-    setTimeout(() => {
-      setSuccess(true);
-      setBtnLoading(false);
-      setResult(data);
-
-      setTimeout(() => {
-        setSuccess(false);
-      }, [2000]);
-
-    }, [2000]);
-    console.log(data);
-
+          setTimeout(() => {
+            setSuccess(false);
+          }, 2000);
+        } else {
+          setBtnLoading(false);
+          setError({
+            isError: true,
+            content: res.data.errmsg
+          });
+        }
+      })
+      .catch(error => {
+        setBtnLoading(false);
+        setError({
+          isError: true,
+          content: '服务器出错啦！'
+        });
+      })
   };
 
   return (
@@ -218,44 +234,7 @@ const JieLong = () => {
             <div className="result-container">
 
               { result ? (
-                <div>
-                  <div className="result">
-                    <div className='row'>
-                      <div className='col-3'>
-                        <div className="result-author-container">
-                          <span className="result-author">{ result.author }</span>
-                          <span className="result-stamp">印</span>
-                        </div>
-                      </div>
-
-                      <div className="col-9">
-                        <div className="result-poem-container">
-                          <div className="result-poem-title">{ result.title }</div>
-                            { result.content.length && result.content.map((item, index) => {
-                              if(index === 0) {
-                                return (
-                                  <div key={index} className="result-poem jielong-poem">{ item }</div>
-                                );
-                              } else {
-                                return (
-                                  <div key={index} className="result-poem">{ item }</div>
-                                );
-                              }
-                            }) }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-center mt-5">
-                    <button
-                      className="btn btn-dark"
-                      style={{
-                        background: '#870002',
-                        border: 'none'
-                      }}
-                    >收藏</button>
-                  </div>
-                </div>
+                <Result result={result}/>
               ) : (
                 <div className="jielong-null null-result"></div>
               ) }

@@ -12,4 +12,5 @@ export default {
   // create poem
   createCangtou: (data) => request.post('/createCangtou', data),
   createSelf: (data) => request.post('/createSelf', data),
+  createJielong: (data) => request.post('/createJielong', data),
 };
