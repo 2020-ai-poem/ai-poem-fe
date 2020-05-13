@@ -5,7 +5,7 @@ import { base_url } from './base_url';
 // create an axios instance
 const request = axios.create({
   baseURL: base_url,
-  timeout: 5000, //请求超时时间
+  // timeout: 5000, //请求超时时间
   withCredentials: true // 允许携带cookie
 });
 

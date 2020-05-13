@@ -1,0 +1,150 @@
+.work.my-container {
+  padding: 50px 100px;
+}
+
+.work {
+  display: flex;
+  color: #333;
+
+  .my-poem {
+    width: 40%;
+    max-height: 620px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .btn-group {
+      margin-top: 20px;
+    }
+
+    .like-btn,
+    .collect-btn {
+      border: none;
+      padding: 8px 12px;
+      transition: all .1s;
+      font-weight: bold;
+
+      &:hover {
+        cursor: pointer;
+        transform: translateY(-3px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 0 #fff;
+      }
+    }
+
+    .like-btn {
+      background-color: #920000;
+      color: #fff;
+    }
+
+    .collect-btn {
+      margin-left: 10px;
+      background-color: #ddd;
+    }
+  }
+
+  .comment-container {
+    width: 60%;
+
+    .info-box {
+      width: 100%;
+      font-size: 14px;
+      border-radius: 2px;
+      margin: 10px 0;
+
+      p {
+        margin: 0px;
+      }
+
+      span {
+        font-weight: bold;
+      }
+    }
+
+    h1 {
+      font-size: 25px;
+    }
+
+    .comment-input {
+      width: 100%;
+      height: 100px;
+      padding: 20px;
+      border-radius: 2px;
+      border: 1px #ddd solid;
+
+      &:focus {
+        outline: none;
+        border: 1px #a1a0a0 solid;
+      }
+    }
+
+    .submit-btn {
+      margin: 10px 0;
+      float: right;
+    }
+
+    .comments {
+      margin-top: 50px;
+
+      .empty-text {
+        padding: 20px;
+      }
+
+      .comment {
+        border-top: 1px #eee solid;
+        padding: 20px;
+        position: relative;
+
+        &:first-child {
+          border: 0;
+        }
+
+        h2 {
+          font-size: 16px;
+        }
+
+        p {
+          margin: 0;
+          color: #616161;
+          font-size: 16px;
+        }
+
+        p.time {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .work.my-container {
+    padding: 50px 30px;
+  }
+
+  .work {
+    flex-direction: column;
+    align-items: center;
+
+    .my-poem {
+      width: 100%;
+    }
+
+    .comment-container {
+      width: 100%;
+      margin-top: 50px;
+    }
+  }
+}

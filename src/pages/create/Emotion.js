@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Result from '../../components/poem/Result';
+import { imageryArray } from '../../tools/imageryArray';
+import api from '../../tools/api';
 
 const initPoem = {
   title: '无题',
   author: '',
-  emotion: '',
-  type: 'emotion',
+  yixiang: '',
   num: 5,
-  kind: 1
+  beamSize: 0
 };
 
 const initError = {
@@ -16,18 +17,70 @@ const initError = {
   content: ''
 };
 
-const resultPoem = {
-  title: '春望',
-  author: '杜甫',
-  content: '国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。'
-};
-
 const Emotion = () => {
   const [poem, setPoem] = useState(initPoem);
+  const [labels, setLabels] = useState([]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(initError);
   const [success, setSuccess] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+
+  const getRandomLabels = () => {
+    const array = [];
+
+    for(let i = 0; i < 15; i++) {
+      let index = Math.floor(Math.random() * imageryArray.length);
+      array.push(imageryArray[index]);
+    }
+
+    setLabels([...array]);
+  }
+
+  useEffect(() => {
+    getRandomLabels();
+  }, []);
+
+  const handleLabelChange = label => {
+    setError(initError);
+
+    const temp = poem.yixiang.split(',');
+
+    let tempStr = "";
+    // 此时点击的 label 是否在原有的意向中
+    // 若在，需要删除
+    // 若不在，需要添加
+    let flag =false;
+
+    for(let i = 0; i < temp.length; i++) {
+      if(temp[i] === label) {
+        flag = true;
+        temp.splice(i, 1);
+      }
+    }
+
+    if(temp.length >= 3 && !flag) {
+      return;
+    }
+
+    if(!flag) {
+      temp.push(label);
+    }
+
+    for(let i = 0; i < temp.length; i++) {
+      if(!temp[i]) continue;
+      if(i !== temp.length - 1) {
+        tempStr += temp[i] + ",";
+      } else {
+        tempStr += temp[i];
+      }
+    }
+
+    setPoem({
+      ...poem,
+      yixiang: tempStr
+    });
+  };
+
 
   const handleChange = e => {
     setError(initError);
@@ -47,51 +100,94 @@ const Emotion = () => {
     });
   };
 
-  const handleKindChange = e => {
-    setError(initError);
-
+  const handleBeamSizeChange = e => {
     setPoem({
       ...poem,
-      kind: parseInt(e.target.value)
+      beamSize: +e.target.value
     });
-  };
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
     setResult(null);
 
-    if(!poem.emotion || !poem.author) {
+    if(!poem.yixiang || !poem.author) {
       setError({
         isError: true,
         content: '诗词不完整噢！'
       });
       return;
     }
+
     console.log(poem);
     setBtnLoading(true);
 
-    let newContent = resultPoem.content.split('。');
-    for(let i = 0; i < newContent.length; i++) {
-      if(!newContent[i]) continue;
-      newContent[i] += '。'
-    }
+    setError({
+      isError: true,
+      content: '正在生成诗句中，还需要等待一段时间，可以切换到其他页面，稍后可在“我的作品”中查看结果哦～'
+    });
 
-    let data = resultPoem;
-    data.content = newContent;
+    api
+      .createYixiang(poem)
+      .then(res => {
+        setError(initError);
+        if(res.status === 200 && res.data.isOk) {
+          let newContent = [];
+          newContent = res.data.poem.split(/，|。/);
+          for(let i = 0; i < newContent.length; i++) {
+            if(!newContent[i]) continue;
+            if(i % 2) {
+              newContent[i] += '。';
+            } else {
+              newContent[i] += '，';
+            }
+          }
 
-    setTimeout(() => {
-      setSuccess(true);
-      setBtnLoading(false);
-      setResult(data);
+          let data = {
+            author: poem.author,
+            title: poem.title,
+            content: newContent
+          };
 
-      setTimeout(() => {
-        setSuccess(false);
-      }, [2000]);
+          setBtnLoading(false);
+          setResult(data);
+          setSuccess(true);
 
-    }, [2000]);
-    console.log(data);
+          setTimeout(() => {
+            setSuccess(false);
+          }, [2000]);
+        } else {
+          setBtnLoading(false);
+          setError({
+            isError: true,
+            content: res.data.errmsg
+          });
+          setTimeout(() => {
+            setError(initError);
+          }, 2000);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setBtnLoading(false);
+        setError({
+          isError: true,
+          content: '服务器出错'
+        });
+        setTimeout(() => {
+          setError(initError);
+        }, 2000);
+      })
 
   };
+
+  const isLabelIn = label => {
+    if(poem.yixiang.search(label) !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   return (
     <div className="container emotion">
@@ -106,15 +202,20 @@ const Emotion = () => {
           <div className="col-md-6">
             <form className="poem-form">
               <div className="form-group">
-                <label htmlFor="emotion">现在心情如何？</label>
-                <input
-                  id="emotion"
-                  autoComplete="off"
-                  value={poem.emotion}
-                  onChange={handleChange}
-                  className="form-control"
-                  placeholder="用一句话或几个词来表达一下你的心情"
-                />
+                <label htmlFor="style">选 1 ~ 3 个意向吧：{ poem.yixiang }</label>
+                <div
+                  className="change-btn"
+                  onClick={getRandomLabels}
+                >换一批</div>
+                <div>
+                  { labels.map((label, index) => (
+                    <span
+                      key={index}
+                      className={ isLabelIn(label) ? 'poem-label poem-label-active' : 'poem-label' }
+                      onClick={() => handleLabelChange(label)}
+                    >{ label }</span>
+                  )) }
+                </div>
               </div>
               <div className="form-group">
                 <label htmlFor="author">署名：</label>
@@ -144,22 +245,23 @@ const Emotion = () => {
                   className="ml-4 mr-2 becca-radio"
                 />七言
               </div>
-              <div className='mt-2'>
-                类型：
-                <input
-                  type="radio"
-                  checked={poem.kind === 1}
-                  value="1"
-                  onChange={handleKindChange}
-                  className="mr-2 becca-radio"
-                />绝句
-                <input
-                  type="radio"
-                  checked={poem.kind === 2}
-                  value="2"
-                  onChange={handleKindChange}
-                  className="ml-4 mr-2 becca-radio"
-                />律诗
+
+              <div className="mt-2">
+                <label>beamSize：</label>
+                <select
+                  className="custom-select"
+                  id="beamSize"
+                  value={poem.beamSize}
+                  onChange={handleBeamSizeChange}
+                >
+                  <option value="0">选择...</option>
+                  <option value="1">1</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+                <p className="mt-2">算法中搜索宽度的大小，该值越大，诗词生成的时间也就越长，但是诗词内容效果会更好。</p>
               </div>
 
               { error.isError && (
@@ -191,18 +293,7 @@ const Emotion = () => {
             <div className="result-container">
 
               { result ? (
-                <div>
-                  <Result result={result} />
-                  <div className="text-center mt-5">
-                    <button
-                      className="btn btn-dark"
-                      style={{
-                        background: '#870002',
-                        border: 'none'
-                      }}
-                    >收藏</button>
-                  </div>
-                </div>
+                <Result result={result} />
               ) : (
                 <div className="emotion-null null-result"></div>
               ) }

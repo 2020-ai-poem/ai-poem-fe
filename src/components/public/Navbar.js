@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { UIContext } from '../../contexts/UIContext';
 import { UserContext } from '../../contexts/UserContext';
 import api from '../../tools/api';
 import './public.css';
 
 const Navbar = () => {
+  const { dimmer, text } = useContext(UIContext);
   const { user, logout } = useContext(UserContext);
 
   const handleLogout = () => {
@@ -26,6 +28,13 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-light sticky-top becca-navbar">
+      { dimmer ? (
+        <div className="dimmer"></div>
+      ) : null }
+
+      { text.isText ? (
+        <div className="public-text">{ text.content }</div>
+      ) : null }
       <div>
         <Link to="/" className="navbar-brand h3 mr-2">AI Poem</Link>
       </div>

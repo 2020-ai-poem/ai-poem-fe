@@ -212,7 +212,7 @@ const SelfCreate = () => {
             </form>
           </div>
           <div className="col-md-6">
-            <div className="result-container">
+            <div className="result-container self-result">
               { result ? (
                 <div>
                   <Result result={result} />

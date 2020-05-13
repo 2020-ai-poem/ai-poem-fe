@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Result from '../../components/poem/Result';
+import { UIContext } from '../../contexts/UIContext';
 import api from '../../tools/api';
 
 const initPoem = {
   num: 5,
-  kind: 1,
   title: '',
   jielong: '',
   author: '',
+  beamSize: 0,
   type: 'jielong'
 };
 
@@ -17,13 +18,14 @@ const initError = {
   content: ''
 };
 
-const resultPoem = {
-  title: '春望',
-  author: '杜甫',
-  content: '国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。'
-};
+// const resultPoem = {
+//   title: '春望',
+//   author: '杜甫',
+//   content: '国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。'
+// };
 
 const JieLong = () => {
+  const { toggleText } = useContext(UIContext);
   const [poem, setPoem] = useState(initPoem);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(initError);
@@ -48,14 +50,12 @@ const JieLong = () => {
     });
   };
 
-  const handleKindChange = e => {
-    setError(initError);
-
+  const handleBeamSizeChange = e => {
     setPoem({
       ...poem,
-      kind: parseInt(e.target.value)
+      beamSize: +e.target.value
     });
-  };
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -87,9 +87,15 @@ const JieLong = () => {
 
     setBtnLoading(true);
 
+    setError({
+      isError: true,
+      content: '正在生成诗句中，还需要等待一段时间，可以切换到其他页面，稍后可在“我的作品”中查看结果哦～'
+    });
+
     api
       .createJielong(poem)
       .then(res => {
+        setError(initError);
         if(res.status === 200 && res.data.isOk) {
           let newContent = res.data.poem.split('。');
           for(let i = 0; i < newContent.length; i++) {
@@ -115,6 +121,9 @@ const JieLong = () => {
             isError: true,
             content: res.data.errmsg
           });
+          setTimeout(() => {
+            setError(initError);
+          }, 2000);
         }
       })
       .catch(error => {
@@ -123,6 +132,9 @@ const JieLong = () => {
           isError: true,
           content: '服务器出错啦！'
         });
+        setTimeout(() => {
+          setError(initError);
+        }, 2000);
       })
   };
 
@@ -186,22 +198,23 @@ const JieLong = () => {
                     className="ml-4 mr-2 becca-radio"
                   />七言
                 </div>
-                <div className='mt-2'>
-                  类型：
-                  <input
-                    type="radio"
-                    checked={poem.kind === 1}
-                    value="1"
-                    onChange={handleKindChange}
-                    className="mr-2 becca-radio"
-                  />绝句
-                  <input
-                    type="radio"
-                    checked={poem.kind === 2}
-                    value="2"
-                    onChange={handleKindChange}
-                    className="ml-4 mr-2 becca-radio"
-                  />律诗
+
+                <div className="mt-2">
+                  <label>beamSize：</label>
+                  <select
+                    className="custom-select"
+                    id="beamSize"
+                    value={poem.beamSize}
+                    onChange={handleBeamSizeChange}
+                  >
+                    <option value="0">选择...</option>
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                  </select>
+                  <p className="mt-2">算法中搜索宽度的大小，该值越大，诗词生成的时间也就越长，但是诗词内容效果会更好。</p>
                 </div>
               </div>
 

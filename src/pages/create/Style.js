@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Result from '../../components/poem/Result';
+import api from '../../tools/api';
 
-const labels = ['喜悦', '乐观', '萧瑟凄凉', '忆旧', '孤寂惆怅', '烦恼', '思乡忧老', '渺远孤逸'];
+const labels = ['闲适豁达', '萧瑟惆怅', '寄情山水', '归隐山林', '飘逸洒脱', '高远清寂', '追忆故人', '感时伤春', '思乡忧老', '喟叹人生'];
 
 const initPoem = {
   title: '无题',
   author: '',
-  description: '',
-  style: '',
+  fengge: '',
+  topic_index: -1,
   num: 5,
-  kind: 1,
-  type: 'style'
+  beamSize: 0,
+  // type: 'style'
 };
 
 const initError = {
   isError: false,
   content: ''
-};
-
-const resultPoem = {
-  title: '春望',
-  author: '杜甫',
-  content: '国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。'
 };
 
 const Style = () => {
@@ -46,7 +41,7 @@ const Style = () => {
 
     setPoem({
       ...poem,
-      style: label
+      topic_index: +label
     });
   };
 
@@ -59,20 +54,18 @@ const Style = () => {
     });
   };
 
-  const handleKindChange = e => {
-    setError(initError);
-
+  const handleBeamSizeChange = e => {
     setPoem({
       ...poem,
-      kind: parseInt(e.target.value)
+      beamSize: +e.target.value
     });
-  };
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
     setResult(null);
 
-    if(!poem.style) {
+    if(poem.topic_index === -1) {
       setError({
         isError: true,
         content: '诗歌没有选择风格噢！'
@@ -80,10 +73,18 @@ const Style = () => {
       return;
     }
 
-    if(!poem.description) {
+    if(poem.num === 5 && poem.fengge.length !== 5) {
       setError({
         isError: true,
-        content: '需要给诗歌加上关键词描述噢！'
+        content: '言体为五言意味着你的首句需要为五个字噢！'
+      });
+      return;
+    }
+
+    if(poem.num === 7 && poem.fengge.length !== 7) {
+      setError({
+        isError: true,
+        content: '言体为七言意味着你的首句需要为七个字噢！'
       });
       return;
     }
@@ -95,31 +96,65 @@ const Style = () => {
       });
       return;
     }
-
-    console.log(poem);
-
+    
     setBtnLoading(true);
 
-    let newContent = resultPoem.content.split('。');
-    for(let i = 0; i < newContent.length; i++) {
-      if(!newContent[i]) continue;
-      newContent[i] += '。'
-    }
+    setError({
+      isError: true,
+      content: '正在生成诗句中，还需要等待一段时间，可以切换到其他页面，稍后可在“我的作品”中查看结果哦～'
+    });
 
-    let data = resultPoem;
-    data.content = newContent;
+    api
+      .createFengge(poem)
+      .then(res => {
+        setError(initError);
+        if(res.status === 200 && res.data.isOk) {
+          let newContent = [];
+          newContent = res.data.poem.split(/，|。/);
+          for(let i = 0; i < newContent.length; i++) {
+            if(!newContent[i]) continue;
+            if(i % 2) {
+              newContent[i] += '。';
+            } else {
+              newContent[i] += '，';
+            }
+          }
 
-    setTimeout(() => {
-      setSuccess(true);
-      setBtnLoading(false);
-      setResult(data);
+          let data = {
+            author: poem.author,
+            title: poem.title,
+            content: newContent
+          };
 
-      setTimeout(() => {
-        setSuccess(false);
-      }, [2000]);
+          setBtnLoading(false);
+          setResult(data);
+          setSuccess(true);
 
-    }, [2000]);
-    console.log(data);
+          setTimeout(() => {
+            setSuccess(false);
+          }, [2000]);
+        } else {
+          setBtnLoading(false);
+          setError({
+            isError: true,
+            content: res.data.errmsg
+          });
+          setTimeout(() => {
+            setError(initError);
+          }, 2000);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setBtnLoading(false);
+        setError({
+          isError: true,
+          content: '服务器出错'
+        });
+        setTimeout(() => {
+          setError(initError);
+        }, 2000);
+      })
   };
 
   return (
@@ -134,29 +169,28 @@ const Style = () => {
         <div className="row poem-row">
           <div className="col-md-6">
             <form className="poem-form">
-
               <div className="form-group">
-                <label htmlFor="style">选一个风格吧：{ poem.style }</label>
+                <label htmlFor="style">选一个风格吧：{ labels[poem.topic_index] }</label>
                 <div>
                   { labels.map((label, index) => (
                     <span
                       key={index}
-                      className={ poem.style === label? 'poem-label poem-label-active' : 'poem-label' }
-                      onClick={() => handleLabelChange(label)}
+                      className={ poem.topic_index === index? 'poem-label poem-label-active' : 'poem-label' }
+                      onClick={() => handleLabelChange(index)}
                     >{ label }</span>
                   )) }
                 </div>
               </div>
 
               <div className="form-group">
-                <label htmlFor="description">描述：</label>
+                <label htmlFor="description">首句：</label>
                 <input
-                  id="description"
+                  id="fengge"
                   autoComplete="off"
                   onChange={handleChange}
                   className="form-control"
-                  value={poem.description}
-                  placeholder="一句话，段落，或关键词"
+                  value={poem.fengge}
+                  placeholder="给一个开头吧"
                 />
               </div>
 
@@ -189,22 +223,23 @@ const Style = () => {
                   className="ml-4 mr-2 becca-radio"
                 />七言
               </div>
-              <div className='mt-2'>
-                类型：
-                <input
-                  type="radio"
-                  checked={poem.kind === 1}
-                  value="1"
-                  onChange={handleKindChange}
-                  className="mr-2 becca-radio"
-                />绝句
-                <input
-                  type="radio"
-                  checked={poem.kind === 2}
-                  value="2"
-                  onChange={handleKindChange}
-                  className="ml-4 mr-2 becca-radio"
-                />律诗
+
+              <div className="mt-2">
+                <label>beamSize：</label>
+                <select
+                  className="custom-select"
+                  id="beamSize"
+                  value={poem.beamSize}
+                  onChange={handleBeamSizeChange}
+                >
+                  <option value="0">选择...</option>
+                  <option value="1">1</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+                <p className="mt-2">算法中搜索宽度的大小，该值越大，诗词生成的时间也就越长，但是诗词内容效果会更好。</p>
               </div>
 
               { error.isError && (

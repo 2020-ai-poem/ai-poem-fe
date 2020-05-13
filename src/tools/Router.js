@@ -12,8 +12,10 @@ import Home from '../pages/home/Home';
 import MyCollection from '../pages/profile/MyCollection';
 import MyWork from '../pages/profile/MyWork';
 import Profile from '../pages/profile/Profile';
+import Work from '../pages/work/Work';
 
 const Router = () => {
+
   return (
     <Switch>
       <Route exact path="/" component={Home} />
@@ -28,6 +30,7 @@ const Router = () => {
       <Route path="/my-collection" component={MyCollection} />
       <Route path="/my-work" component={MyWork} />
       <Route path="/profile/:id" component={Profile} />
+      <Route path="/work/:id" component={Work} />
     </Switch>
   );
 };

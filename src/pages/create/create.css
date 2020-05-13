@@ -58,7 +58,7 @@
 }
 
 .poem-form {
-  padding: 15% 5%;
+  padding: 30px 0;
   height: 100%;
 }
 
@@ -75,6 +75,11 @@
 
 .result-container {
   height: 100%;
+  max-height: 550px;
+}
+
+.self-result {
+  max-height: 750px;
 }
 
 /* Poem Result */
