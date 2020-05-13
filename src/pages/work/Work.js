@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 import { UIContext } from '../../contexts/UIContext';
 import Result from '../../components/poem/Result';
@@ -12,12 +13,19 @@ const initData = {
 }
 
 const Work = (props) => {
+  const history = useHistory();
   const { user } = useContext(UserContext);
   const { toggleDimmer, toggleText } = useContext(UIContext);
   const id = props.match.params.id;
   const [result, setResult] = useState(null);
   const [data, setData] = useState(initData);
   const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    if(user === null) {
+      history.push('/signin');
+    }
+  }, []);
 
   const getData = () => {
     toggleDimmer(true);
@@ -31,7 +39,7 @@ const Work = (props) => {
       .then(res => {
         toggleDimmer(false);
 
-        if(res.status === 200) {
+        if(res.status === 200 && res.data.isOk) {
           let newContent = res.data.poem[0].content.split('。');
           for(let i = 0; i < newContent.length; i++) {
             if(!newContent[i]) continue;

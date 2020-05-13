@@ -6,7 +6,7 @@ import { base_url } from './base_url';
 const request = axios.create({
   baseURL: base_url,
   // timeout: 5000, //请求超时时间
-  withCredentials: true // 允许携带cookie
+  // withCredentials: true // 允许携带cookie
 });
 
 // axios请求拦截器
