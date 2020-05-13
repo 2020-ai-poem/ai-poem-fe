@@ -5,7 +5,7 @@ import { imageryArray } from '../../tools/imageryArray';
 import api from '../../tools/api';
 
 const initPoem = {
-  title: '无题',
+  title: '',
   author: '',
   yixiang: '',
   num: 5,
@@ -111,6 +111,14 @@ const Emotion = () => {
     e.preventDefault();
     setResult(null);
 
+    if(!poem.title) {
+      setError({
+        isError: true,
+        content: '标题不能为空噢！'
+      });
+      return;
+    }
+
     if(!poem.yixiang || !poem.author) {
       setError({
         isError: true,
@@ -215,10 +223,10 @@ const Emotion = () => {
       <div className="becca-bread">
         <Link className="becca-bread-link" to="/create">作诗</Link>
         <span className="becca-forward-slash">/</span>
-        <span className="becca-bread-text">情感诗</span>
+        <span className="becca-bread-text">意向</span>
       </div>
       <div className="container becca-card">
-        <h4>情感诗</h4>
+        <h4>意向</h4>
         <div className="row poem-row">
           <div className="col-md-6">
             <form className="poem-form">
@@ -247,7 +255,16 @@ const Emotion = () => {
                 </div>
               </div>
               <div className="form-group">
-                <label htmlFor="author">署名：</label>
+                <label htmlFor="content">标题：</label>
+                <input
+                  className="form-control"
+                  placeholder="给诗取一个名字吧"
+                  id="title"
+                  value={poem.title}
+                  onChange={handleChange}
+                  autoComplete="off"
+                />
+                <label htmlFor="author" className="mt-3">署名：</label>
                 <input
                   id="author"
                   autoComplete="off"
@@ -309,6 +326,7 @@ const Emotion = () => {
                 <button
                   className="btn btn-light"
                   onClick={handleSubmit}
+                  disabled={btnLoading}
                 >
                   { btnLoading && (
                     <span className="mr-2 spinner-grow spinner-grow-sm"></span>

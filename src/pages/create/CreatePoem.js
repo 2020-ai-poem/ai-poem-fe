@@ -24,7 +24,7 @@ const CreatePoem = () => {
           <div className="col-sm-3">
             <div className="circle-container">
               <div className="emotion-img circle-text" onClick={() => history.push('/emotion')}></div>
-              <p className="circle-detail-text">意向诗</p>
+              <p className="circle-detail-text">意向</p>
             </div>
           </div>
           <div className="col-sm-3">

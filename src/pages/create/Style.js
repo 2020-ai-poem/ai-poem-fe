@@ -6,7 +6,7 @@ import api from '../../tools/api';
 const labels = ['闲适豁达', '萧瑟惆怅', '寄情山水', '归隐山林', '飘逸洒脱', '高远清寂', '追忆故人', '感时伤春', '思乡忧老', '喟叹人生'];
 
 const initPoem = {
-  title: '无题',
+  title: '',
   author: '',
   fengge: '',
   topic_index: -1,
@@ -73,6 +73,14 @@ const Style = () => {
       return;
     }
 
+    if(!poem.title) {
+      setError({
+        isError: true,
+        content: '标题不能为空噢！'
+      });
+      return;
+    }
+
     if(poem.num === 5 && poem.fengge.length !== 5) {
       setError({
         isError: true,
@@ -96,7 +104,7 @@ const Style = () => {
       });
       return;
     }
-    
+
     setBtnLoading(true);
 
     setError({
@@ -183,7 +191,16 @@ const Style = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="description">首句：</label>
+                <label htmlFor="title">标题：</label>
+                <input
+                  className="form-control"
+                  placeholder="给诗取一个名字吧"
+                  id="title"
+                  value={poem.title}
+                  onChange={handleChange}
+                  autoComplete="off"
+                />
+                <label htmlFor="description" className="mt-2">首句：</label>
                 <input
                   id="fengge"
                   autoComplete="off"
@@ -258,6 +275,7 @@ const Style = () => {
                 <button
                   className="btn btn-light"
                   onClick={handleSubmit}
+                  disabled={btnLoading}
                 >
                   { btnLoading && (
                     <span className="mr-2 spinner-grow spinner-grow-sm"></span>

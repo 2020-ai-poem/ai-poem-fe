@@ -204,8 +204,8 @@
 
 .change-btn {
   position: absolute;
-  bottom: -15px;
-  right: 12px;
+  top: -5px;
+  right: 15px;
   background-color: transparent;
   padding: 3px 12px;
   border: 1px #ddd solid;

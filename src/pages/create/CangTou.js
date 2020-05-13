@@ -5,7 +5,7 @@ import api from '../../tools/api';
 const initPoem = {
   num: 5,
   beamSize: 0,
-  title: '无题',
+  title: '',
   cangtou: '',
   author: '',
   type: 'cangtou'
@@ -59,6 +59,14 @@ const CangTou = () => {
   const handleSubmit = e => {
     e.preventDefault();
     setResult(null);
+
+    if(!poem.title) {
+      setError({
+        isError: true,
+        content: '标题不能为空噢！'
+      });
+      return;
+    }
 
     if(!poem.cangtou) {
       setError({
@@ -188,7 +196,16 @@ const CangTou = () => {
           <div className="col-md-6">
             <form className="poem-form">
               <div className="form-group">
-                <label htmlFor="content">藏头：</label>
+                <label htmlFor="content">标题：</label>
+                <input
+                  className="form-control"
+                  placeholder="给诗取一个名字吧"
+                  id="title"
+                  value={poem.title}
+                  onChange={handleChange}
+                  autoComplete="off"
+                />
+                <label htmlFor="content" className="mt-3">藏头：</label>
                 <input
                   className="form-control"
                   placeholder="四字（如：新年快乐）"
@@ -260,6 +277,7 @@ const CangTou = () => {
                   <button
                     className="btn btn-light"
                     onClick={handleSubmit}
+                    disabled={btnLoading}
                   >
                     { btnLoading && (
                       <span className="mr-2 spinner-grow spinner-grow-sm"></span>

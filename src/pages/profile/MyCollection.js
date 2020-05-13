@@ -39,7 +39,7 @@ const MyCollection = () => {
 
   const transferType = (type) => {
     if(type === 'yixiang') {
-      return '意向诗';
+      return '意向';
     } else if(type === 'cangtou') {
       return '藏头诗';
     } else if(type === 'jielong') {
