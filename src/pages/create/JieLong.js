@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Result from '../../components/poem/Result';
-import { UIContext } from '../../contexts/UIContext';
 import api from '../../tools/api';
 
 const initPoem = {
@@ -11,21 +10,14 @@ const initPoem = {
   author: '',
   beamSize: 0,
   type: 'jielong'
-};
+}
 
 const initError = {
   isError: false,
   content: ''
-};
-
-// const resultPoem = {
-//   title: '春望',
-//   author: '杜甫',
-//   content: '国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。烽火连三月，家书抵万金。白头搔更短，浑欲不胜簪。'
-// };
+}
 
 const JieLong = () => {
-  const { toggleText } = useContext(UIContext);
   const [poem, setPoem] = useState(initPoem);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(initError);

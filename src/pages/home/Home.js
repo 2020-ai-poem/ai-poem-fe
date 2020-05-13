@@ -20,7 +20,6 @@ const Home = () => {
       .then(res => {
         toggleDimmer(false);
         if(res.status === 200) {
-          console.log(res.data.poems);
           setData(res.data.poems)
         }
       })

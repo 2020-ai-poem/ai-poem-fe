@@ -119,7 +119,6 @@ const Emotion = () => {
       return;
     }
 
-    console.log(poem);
     setBtnLoading(true);
 
     setError({
@@ -189,6 +188,28 @@ const Emotion = () => {
     }
   }
 
+  const choseLabel = string => {
+    const temp = string.split(',');
+
+    const tempArr = [];
+
+    for(let i = 0; i < temp.length; i++) {
+      if(!temp[i]) continue;
+      tempArr.push(temp[i]);
+    }
+
+    return tempArr;
+
+    // for(let i = 0; i < temp.length; i++) {
+    //   if(!temp[i]) continue;
+    //   const spanEl = `
+    //     <span onClick={() => handleLabelChange(${temp[i]})}>{ temp[i] }</span>，
+    //   `;
+    //   tempStr += spanEl;
+    // }
+    // return tempStr;
+  }
+
   return (
     <div className="container emotion">
       <div className="becca-bread">
@@ -202,7 +223,15 @@ const Emotion = () => {
           <div className="col-md-6">
             <form className="poem-form">
               <div className="form-group">
-                <label htmlFor="style">选 1 ~ 3 个意向吧：{ poem.yixiang }</label>
+                <label htmlFor="style">选 1 ~ 3 个意向吧：
+                  { choseLabel(poem.yixiang).map((item, index) => (
+                    <span
+                      key={index}
+                      className="my-label"
+                      onClick={() => handleLabelChange(item)}
+                    >{ item }</span>
+                  )) }
+                </label>
                 <div
                   className="change-btn"
                   onClick={getRandomLabels}

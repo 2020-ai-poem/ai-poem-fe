@@ -196,3 +196,40 @@
   color: #2c2c2c;
   font-weight: bold;
 }
+
+/* Emotion */
+.form-group {
+  position: relative;
+}
+
+.change-btn {
+  position: absolute;
+  bottom: -15px;
+  right: 12px;
+  background-color: transparent;
+  padding: 3px 12px;
+  border: 1px #ddd solid;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.change-btn:hover {
+  cursor: pointer;
+  font-weight: bold;
+  border: 1px #ddd solid;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.change-btn:active {
+  transform: translateY(0);
+}
+
+.my-label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.my-label:hover {
+  cursor: pointer;
+}

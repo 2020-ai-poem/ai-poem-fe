@@ -32,7 +32,6 @@ const Work = (props) => {
         toggleDimmer(false);
 
         if(res.status === 200) {
-          console.log(res.data.poem[0]);
           let newContent = res.data.poem[0].content.split('。');
           for(let i = 0; i < newContent.length; i++) {
             if(!newContent[i]) continue;
@@ -120,7 +119,7 @@ const Work = (props) => {
     }
 
     api
-      .addCollection(data)
+      .addCollection(data0)
       .then(res => {
         toggleDimmer(false);
 

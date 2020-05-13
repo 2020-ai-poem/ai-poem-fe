@@ -9,10 +9,6 @@ const MyCollection = () => {
   const [data, setData] = useState([]);
   const { toggleDimmer } = useContext(UIContext);
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   const getData = () => {
     toggleDimmer(true);
     api
@@ -22,13 +18,16 @@ const MyCollection = () => {
         if(res.status === 200 && res.data.isOk) {
           setData(res.data.poems)
         }
-        console.log(res.data.poems);
       })
       .catch (error => {
         toggleDimmer(false);
         console.log(error);
       })
   }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const spliceContent = (content) => {
     return content.substr(0, 20) + "...";
